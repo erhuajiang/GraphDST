@@ -513,6 +513,23 @@ def load_and_cache_examples(args, model, tokenizer, processor, evaluate=False):
     if args.local_rank == 0 and not evaluate:
         torch.distributed.barrier()  # Make sure only the first process in distributed training process the dataset, and the others will use the cache
 
+    # schema graph feature
+    node_list = model.domain_list + model.slot_list
+    initial_node_matrix = []
+    for x_node in node_list:
+        node_row = [0] * len(node_list)
+        for y_id, y_node in enumerate(node_list):
+            if len(x_node.split("-")) == 1 and len(y_node.split("-")) == 1:
+                node_row[y_id] = 1
+            elif len(x_node.split("-")) == 1 and len(y_node.split("-")) == 2 and x_node in y_node:
+                node_row[y_id] = 1
+            elif len(x_node.split("-")) == 2 and len(y_node.split("-")) == 1 and y_node in x_node:
+                node_row[y_id] = 1
+            else:
+                node_row[y_id] = 0
+        initial_node_matrix.append(node_row)
+    
+    
     # Convert to Tensors and build dataset
     all_input_ids = torch.tensor([f.input_ids for f in features], dtype=torch.long)
     all_input_mask = torch.tensor([f.input_mask for f in features], dtype=torch.long)
@@ -524,7 +541,7 @@ def load_and_cache_examples(args, model, tokenizer, processor, evaluate=False):
     f_refer_ids = [f.refer_id for f in features]
     f_diag_state = [f.diag_state for f in features]
     f_class_label_ids = [f.class_label_id for f in features]
-    # all_initial_node_matrix = torch.tensor([f.initial_node_matrix for f in features], dtype=torch.long)
+    all_initial_node_matrix = torch.tensor([initial_node_matrix for f in features], dtype=torch.long)
     all_slot_id = torch.tensor([range(len(model.slot_list) + len(model.domain_list)) for f in features], dtype=torch.long)
     all_start_positions = {}
     all_end_positions = {}
@@ -545,7 +562,7 @@ def load_and_cache_examples(args, model, tokenizer, processor, evaluate=False):
                                 all_refer_ids,
                                 all_diag_state,
                                 all_class_label_ids, all_example_index,
-                                # all_initial_node_matrix,
+                                all_initial_node_matrix,
                                 all_slot_id)
 
     return dataset, features
