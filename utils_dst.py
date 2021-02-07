@@ -422,8 +422,7 @@ def convert_examples_to_features(examples, slot_list, domain_list, class_types, 
                 inform_slot=inform_slot_dict,
                 refer_id=refer_id_dict,
                 diag_state=diag_state_dict,
-                class_label_id=class_label_id_dict,
-                initial_node_matrix=initial_node_matrix))
+                class_label_id=class_label_id_dict))
 
     logger.info("========== %d out of %d examples have text too long" % (too_long_cnt, total_cnt))
 

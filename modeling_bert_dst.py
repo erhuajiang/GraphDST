@@ -50,7 +50,7 @@ class BertForDST(BertPreTrainedModel):
         self.dropout_heads = nn.Dropout(config.dst_heads_dropout_rate)
         
         # node embedding table
-        self.node_table = nn.Embedding(len(self.slot_list) + len(self.domain_list), config.hidden_size)
+        self.node_table = NodeTable(config)
         
         # node representation
         self.graph = GraphLayer()
@@ -69,6 +69,7 @@ class BertForDST(BertPreTrainedModel):
         aux_dims = len(self.slot_list) * (self.class_aux_feats_inform + self.class_aux_feats_ds) # second term is 0, 1 or 2
 
         for slot in self.slot_list:
+            #self.add_module("class_" + slot, nn.Linear(config.hidden_size + aux_dims, self.class_labels))
             self.add_module("class_" + slot, nn.Linear(config.hidden_size + aux_dims + config.hidden_size, self.class_labels))
             self.add_module("token_" + slot, nn.Linear(config.hidden_size + config.hidden_size, 2))
             self.add_module("refer_" + slot, nn.Linear(config.hidden_size + aux_dims + config.hidden_size, len(self.slot_list) + 1))
@@ -87,7 +88,8 @@ class BertForDST(BertPreTrainedModel):
                 refer_id=None,
                 class_label_id=None,
                 diag_state=None,
-                initial_node_matrix=None):
+                initial_node_matrix=None,
+                slot_id=None):
         outputs = self.bert(
             input_ids,
             attention_mask=input_mask,
@@ -119,11 +121,15 @@ class BertForDST(BertPreTrainedModel):
             pooled_output_aux = pooled_output
             
         # schema graph
-        initial_node_embedding = self.graph(self.node_table, initial_node_matrix)
-        dialogue_aware_node_embedding = self.dialogue_attention(pooled_output_aux, initial_node_embedding)
+        node_embedding_table = self.node_table()
+        batch_node_embedding = node_embedding_table(slot_id)
+        # real_batch_size = self.config.dst_batch_size
+        # tile_node_embedding_table = node_embedding_table.repeat(real_batch_size, 1, 1)
+        initial_node_embedding = self.graph(batch_node_embedding, initial_node_matrix)
+        dialogue_aware_node_embedding = self.dialogue_attention(sequence_output, initial_node_embedding)
         schema_graph_structure = self.add_edge(dialogue_aware_node_embedding, initial_node_matrix)
         new_node_embedding = self.graph(dialogue_aware_node_embedding, schema_graph_structure)
-        
+
         total_loss = 0
         per_slot_per_example_loss = {}
         per_slot_class_logits = {}
@@ -140,11 +146,12 @@ class BertForDST(BertPreTrainedModel):
             # else:
             #     pooled_output_aux = pooled_output
             
-            slot_embedding = new_node_embedding[len(self.domain_list) + slot_id]
-            
+            slot_embedding = new_node_embedding[:, len(self.domain_list) + slot_id, :]  # batch, dim
+            # class_logits = self.dropout_heads(getattr(self, 'class_' + slot)(pooled_output_aux))
             class_logits = self.dropout_heads(getattr(self, 'class_' + slot)(torch.cat((pooled_output_aux, slot_embedding), 1)))
 
-            token_logits = self.dropout_heads(getattr(self, 'token_' + slot)(torch.cat((sequence_output, slot_embedding), 1)))
+            slot_embedding_token = torch.reshape(slot_embedding.repeat(1, self.config.dst_sequence_len), (-1, self.config.dst_sequence_len, self.config.hidden_size))
+            token_logits = self.dropout_heads(getattr(self, 'token_' + slot)(torch.cat((sequence_output, slot_embedding_token), 2)))
             start_logits, end_logits = token_logits.split(1, dim=-1)
             start_logits = start_logits.squeeze(-1)
             end_logits = end_logits.squeeze(-1)
@@ -201,16 +208,29 @@ class BertForDST(BertPreTrainedModel):
         return outputs
     
 
+class NodeTable(nn.Module):
+    
+    def __init__(self, config):
+        super(NodeTable, self).__init__()
+        self.domain_num = len(config.dst_domain_list)
+        self.slot_num = len(config.dst_slot_list)
+        self.node_num = self.domain_num + self.slot_num
+        self.node_table = nn.Embedding(self.node_num, config.hidden_size)
+
+    def forward(self):
+        return self.node_table
+
+
 class GraphLayer(nn.Module):
     
     def __init__(self, **kwargs):
         super(GraphLayer, self).__init__(**kwargs)
         
     def forward(self, node_embedding, adjacent_matrix):
-        x = node_embedding.mm(node_embedding.t())
+        x = torch.matmul(node_embedding, torch.transpose(node_embedding, 1, 2))
         x[~adjacent_matrix] = float('-inf')
-        att = torch.softmax(x, dim=1)
-        w_node_embedding = att.mm(node_embedding)
+        att = torch.softmax(x, dim=2)
+        w_node_embedding = att.matmul(node_embedding)
         return w_node_embedding
     
 
@@ -220,8 +240,8 @@ class DialogueAtt(nn.Module):
         super(DialogueAtt, self).__init__(**kwargs)
         
     def forward(self, token, node):
-        att = torch.softmax(node.mm(token.t()), dim=1)
-        w_node_embedding = att.mm(token)
+        att = torch.softmax(node.matmul(torch.transpose(token, 1, 2)), dim=2)
+        w_node_embedding = att.matmul(token)
         return w_node_embedding
 
 
@@ -235,13 +255,13 @@ class AddEdge(nn.Module):
         self.params = nn.Parameter(torch.randn(config.hidden_size, config.hidden_size))
 
     def forward(self, node, node_matrix):
-        prob = torch.sigmoid(node.mm(self.params).mm(node.t()))
+        prob = torch.sigmoid(node.matmul(self.params).matmul(torch.transpose(node, 1, 2)))
         pred = (prob > 0.5).float()
-        slot_slot_pred = pred[self.domain_num:, self.domain_num:]
-        slot_slot_initial = node_matrix[self.domain_num:, self.domain_num:]
-        slot_slot = ((slot_slot_pred + slot_slot_initial) >= 1).float()
-        domain_domain = node_matrix[:self.domain_num, :self.domain_num]
-        domain_slot = node_matrix[:self.domain_num, self.domain_num:]
-        slot_domain = node_matrix[self.domain_num:, :self.domain_num]
-        new_edge = torch.cat((torch.cat((domain_domain, domain_slot), 1), torch.cat((slot_domain, slot_slot), 1)), 0)
+        slot_slot_pred = pred[:, self.domain_num:, self.domain_num:]
+        slot_slot_initial = node_matrix[:, self.domain_num:, self.domain_num:]
+        slot_slot = ((slot_slot_pred + slot_slot_initial) >= 1).long()
+        domain_domain = node_matrix[:, :self.domain_num, :self.domain_num]
+        domain_slot = node_matrix[:, :self.domain_num, self.domain_num:]
+        slot_domain = node_matrix[:, self.domain_num:, :self.domain_num]
+        new_edge = torch.cat((torch.cat((domain_domain, domain_slot), 2), torch.cat((slot_domain, slot_slot), 2)), 1)
         return new_edge

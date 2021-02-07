@@ -203,7 +203,8 @@ def train(args, train_dataset, features, model, tokenizer, processor, continue_f
                       'refer_id':        batch[6],
                       'diag_state':      batch[7],
                       'class_label_id':  batch[8],
-                      'initial_node_matrix': batch[10]}
+                      'initial_node_matrix': batch[10],
+                      'slot_id': batch[11]}
             outputs = model(**inputs)
             loss = outputs[0]  # model outputs are always tuple in pytorch-transformers (see doc)
 
@@ -301,7 +302,9 @@ def evaluate(args, model, tokenizer, processor, prefix=""):
                       'inform_slot_id':  batch[5],
                       'refer_id':        batch[6],
                       'diag_state':      diag_state,
-                      'class_label_id':  batch[8]}
+                      'class_label_id':  batch[8],
+                      'initial_node_matrix': batch[10],
+                      'slot_id': batch[11]}
             unique_ids = [features[i.item()].guid for i in batch[9]]
             values = [features[i.item()].values for i in batch[9]]
             input_ids_unmasked = [features[i.item()].input_ids_unmasked for i in batch[9]]
@@ -522,6 +525,7 @@ def load_and_cache_examples(args, model, tokenizer, processor, evaluate=False):
     f_diag_state = [f.diag_state for f in features]
     f_class_label_ids = [f.class_label_id for f in features]
     all_initial_node_matrix = torch.tensor([f.initial_node_matrix for f in features], dtype=torch.long)
+    all_slot_id = torch.tensor([range(len(model.slot_list) + len(model.domain_list)) for f in features], dtype=torch.long)
     all_start_positions = {}
     all_end_positions = {}
     all_inform_slot_ids = {}
@@ -541,7 +545,8 @@ def load_and_cache_examples(args, model, tokenizer, processor, evaluate=False):
                                 all_refer_ids,
                                 all_diag_state,
                                 all_class_label_ids, all_example_index,
-                                all_initial_node_matrix)
+                                all_initial_node_matrix,
+                                all_slot_id)
 
     return dataset, features
 
@@ -746,6 +751,11 @@ def main():
     config.dst_domain_list = dst_domain_list
     config.dst_class_types = dst_class_types
     config.dst_class_labels = dst_class_labels
+    config.dst_sequence_len = args.max_seq_length
+    if args.do_train:
+        config.dst_batch_size = args.per_gpu_train_batch_size * max(1, args.n_gpu)
+    else:
+        config.dst_batch_size = args.per_gpu_eval_batch_size
 
     tokenizer = tokenizer_class.from_pretrained(args.tokenizer_name if args.tokenizer_name else args.model_name_or_path, do_lower_case=args.do_lower_case)
     model = model_class.from_pretrained(args.model_name_or_path, from_tf=bool('.ckpt' in args.model_name_or_path), config=config)

@@ -5,7 +5,8 @@
     "copy_value",
     "true",
     "false",
-    "inform"
+    "inform",
+    "refer"
   ],
   "slots": [
     "taxi-leaveAt",

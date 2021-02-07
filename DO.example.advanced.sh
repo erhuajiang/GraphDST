@@ -9,11 +9,13 @@
 #TASK="woz2"
 #DATA_DIR="data/woz2"
 TASK="multiwoz21"
-DATA_DIR="data"
+DATA_DIR="/home/yfeng/graph-DST/dataset/MULTIWOZ2.1"
+#DATA_DIR="/home/yfeng/graph-DST/GraphDST/data"
 
 # Project paths etc. ----------------------------------------------
 
-OUT_DIR=multiwoz_trippy/
+OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/multiwoz2.1/
+#OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/test/
 
 # Main ------------------------------------------------------------
 
