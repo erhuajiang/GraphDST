@@ -524,7 +524,7 @@ def load_and_cache_examples(args, model, tokenizer, processor, evaluate=False):
     f_refer_ids = [f.refer_id for f in features]
     f_diag_state = [f.diag_state for f in features]
     f_class_label_ids = [f.class_label_id for f in features]
-    all_initial_node_matrix = torch.tensor([f.initial_node_matrix for f in features], dtype=torch.long)
+    # all_initial_node_matrix = torch.tensor([f.initial_node_matrix for f in features], dtype=torch.long)
     all_slot_id = torch.tensor([range(len(model.slot_list) + len(model.domain_list)) for f in features], dtype=torch.long)
     all_start_positions = {}
     all_end_positions = {}
@@ -545,7 +545,7 @@ def load_and_cache_examples(args, model, tokenizer, processor, evaluate=False):
                                 all_refer_ids,
                                 all_diag_state,
                                 all_class_label_ids, all_example_index,
-                                all_initial_node_matrix,
+                                # all_initial_node_matrix,
                                 all_slot_id)
 
     return dataset, features
