@@ -23,6 +23,7 @@ import logging
 import six
 import numpy as np
 import json
+import traceback
 
 logger = logging.getLogger(__name__)
 
@@ -306,123 +307,126 @@ def convert_examples_to_features(examples, slot_list, domain_list, class_types, 
             else:
                 node_row[y_id] = 0
         initial_node_matrix.append(node_row)
+
+    try:
+        # Convert single example
+        for (example_index, example) in enumerate(examples):
+            if example_index % 1000 == 0:
+                logger.info("Writing example %d of %d" % (example_index, len(examples)))
     
+            total_cnt += 1
     
-    # Convert single example
-    for (example_index, example) in enumerate(examples):
-        if example_index % 1000 == 0:
-            logger.info("Writing example %d of %d" % (example_index, len(examples)))
-
-        total_cnt += 1
-
-        value_dict = {}
-        inform_dict = {}
-        inform_slot_dict = {}
-        refer_id_dict = {}
-        diag_state_dict = {}
-        class_label_id_dict = {}
-        start_pos_dict = {}
-        end_pos_dict = {}
-        for slot in slot_list:
-            tokens_a, tokens_a_unmasked, token_labels_a = _tokenize_text_and_label(
-                example.text_a, example.text_a_label, slot, tokenizer, model_specs, slot_value_dropout)
-            tokens_b, tokens_b_unmasked, token_labels_b = _tokenize_text_and_label(
-                example.text_b, example.text_b_label, slot, tokenizer, model_specs, slot_value_dropout)
-            tokens_history, tokens_history_unmasked, token_labels_history = _tokenize_text_and_label(
-                example.history, example.history_label, slot, tokenizer, model_specs, slot_value_dropout)
-
-            input_text_too_long = _truncate_length_and_warn(
-                tokens_a, tokens_b, tokens_history, max_seq_length, model_specs, example.guid)
-
+            value_dict = {}
+            inform_dict = {}
+            inform_slot_dict = {}
+            refer_id_dict = {}
+            diag_state_dict = {}
+            class_label_id_dict = {}
+            start_pos_dict = {}
+            end_pos_dict = {}
+            for slot in slot_list:
+                tokens_a, tokens_a_unmasked, token_labels_a = _tokenize_text_and_label(
+                    example.text_a, example.text_a_label, slot, tokenizer, model_specs, slot_value_dropout)
+                tokens_b, tokens_b_unmasked, token_labels_b = _tokenize_text_and_label(
+                    example.text_b, example.text_b_label, slot, tokenizer, model_specs, slot_value_dropout)
+                tokens_history, tokens_history_unmasked, token_labels_history = _tokenize_text_and_label(
+                    example.history, example.history_label, slot, tokenizer, model_specs, slot_value_dropout)
+    
+                input_text_too_long = _truncate_length_and_warn(
+                    tokens_a, tokens_b, tokens_history, max_seq_length, model_specs, example.guid)
+    
+                if input_text_too_long:
+                    if example_index < 10:
+                        if len(token_labels_a) > len(tokens_a):
+                            logger.info('    tokens_a truncated labels: %s' % str(token_labels_a[len(tokens_a):]))
+                        if len(token_labels_b) > len(tokens_b):
+                            logger.info('    tokens_b truncated labels: %s' % str(token_labels_b[len(tokens_b):]))
+                        if len(token_labels_history) > len(tokens_history):
+                            logger.info('    tokens_history truncated labels: %s' % str(token_labels_history[len(tokens_history):]))
+    
+                    token_labels_a = token_labels_a[:len(tokens_a)]
+                    token_labels_b = token_labels_b[:len(tokens_b)]
+                    token_labels_history = token_labels_history[:len(tokens_history)]
+                    tokens_a_unmasked = tokens_a_unmasked[:len(tokens_a)]
+                    tokens_b_unmasked = tokens_b_unmasked[:len(tokens_b)]
+                    tokens_history_unmasked = tokens_history_unmasked[:len(tokens_history)]
+    
+                assert len(token_labels_a) == len(tokens_a)
+                assert len(token_labels_b) == len(tokens_b)
+                assert len(token_labels_history) == len(tokens_history)
+                assert len(token_labels_a) == len(tokens_a_unmasked)
+                assert len(token_labels_b) == len(tokens_b_unmasked)
+                assert len(token_labels_history) == len(tokens_history_unmasked)
+                token_label_ids = _get_token_label_ids(token_labels_a, token_labels_b, token_labels_history, max_seq_length, model_specs)
+    
+                value_dict[slot] = example.values[slot]
+                inform_dict[slot] = example.inform_label[slot]
+    
+                class_label_mod, start_pos_dict[slot], end_pos_dict[slot] = _get_start_end_pos(
+                    example.class_label[slot], token_label_ids, max_seq_length)
+                if class_label_mod != example.class_label[slot]:
+                    example.class_label[slot] = class_label_mod
+                inform_slot_dict[slot] = example.inform_slot_label[slot]
+                refer_id_dict[slot] = refer_list.index(example.refer_label[slot])
+                diag_state_dict[slot] = class_types.index(example.diag_state[slot])
+                class_label_id_dict[slot] = class_types.index(example.class_label[slot])
+    
             if input_text_too_long:
-                if example_index < 10:
-                    if len(token_labels_a) > len(tokens_a):
-                        logger.info('    tokens_a truncated labels: %s' % str(token_labels_a[len(tokens_a):]))
-                    if len(token_labels_b) > len(tokens_b):
-                        logger.info('    tokens_b truncated labels: %s' % str(token_labels_b[len(tokens_b):]))
-                    if len(token_labels_history) > len(tokens_history):
-                        logger.info('    tokens_history truncated labels: %s' % str(token_labels_history[len(tokens_history):]))
+                too_long_cnt += 1
+                
+            tokens, input_ids, input_mask, segment_ids = _get_transformer_input(tokens_a,
+                                                                                tokens_b,
+                                                                                tokens_history,
+                                                                                max_seq_length,
+                                                                                tokenizer,
+                                                                                model_specs)
+            if slot_value_dropout > 0.0:
+                _, input_ids_unmasked, _, _ = _get_transformer_input(tokens_a_unmasked,
+                                                                     tokens_b_unmasked,
+                                                                     tokens_history_unmasked,
+                                                                     max_seq_length,
+                                                                     tokenizer,
+                                                                     model_specs)
+            else:
+                input_ids_unmasked = input_ids
+    
+            assert(len(input_ids) == len(input_ids_unmasked))
+    
+            if example_index < 10:
+                logger.info("*** Example ***")
+                logger.info("guid: %s" % (example.guid))
+                logger.info("tokens: %s" % " ".join(tokens))
+                logger.info("input_ids: %s" % " ".join([str(x) for x in input_ids]))
+                logger.info("input_mask: %s" % " ".join([str(x) for x in input_mask]))
+                logger.info("segment_ids: %s" % " ".join([str(x) for x in segment_ids]))
+                logger.info("start_pos: %s" % str(start_pos_dict))
+                logger.info("end_pos: %s" % str(end_pos_dict))
+                logger.info("values: %s" % str(value_dict))
+                logger.info("inform: %s" % str(inform_dict))
+                logger.info("inform_slot: %s" % str(inform_slot_dict))
+                logger.info("refer_id: %s" % str(refer_id_dict))
+                logger.info("diag_state: %s" % str(diag_state_dict))
+                logger.info("class_label_id: %s" % str(class_label_id_dict))
+                logger.info("initial_node_matrix: %s" % " ".join([str(x) for x in initial_node_matrix]))
+    
+            features.append(
+                InputFeatures(
+                    guid=example.guid,
+                    input_ids=input_ids,
+                    input_ids_unmasked=input_ids_unmasked,
+                    input_mask=input_mask,
+                    segment_ids=segment_ids,
+                    start_pos=start_pos_dict,
+                    end_pos=end_pos_dict,
+                    values=value_dict,
+                    inform=inform_dict,
+                    inform_slot=inform_slot_dict,
+                    refer_id=refer_id_dict,
+                    diag_state=diag_state_dict,
+                    class_label_id=class_label_id_dict))
 
-                token_labels_a = token_labels_a[:len(tokens_a)]
-                token_labels_b = token_labels_b[:len(tokens_b)]
-                token_labels_history = token_labels_history[:len(tokens_history)]
-                tokens_a_unmasked = tokens_a_unmasked[:len(tokens_a)]
-                tokens_b_unmasked = tokens_b_unmasked[:len(tokens_b)]
-                tokens_history_unmasked = tokens_history_unmasked[:len(tokens_history)]
-
-            assert len(token_labels_a) == len(tokens_a)
-            assert len(token_labels_b) == len(tokens_b)
-            assert len(token_labels_history) == len(tokens_history)
-            assert len(token_labels_a) == len(tokens_a_unmasked)
-            assert len(token_labels_b) == len(tokens_b_unmasked)
-            assert len(token_labels_history) == len(tokens_history_unmasked)
-            token_label_ids = _get_token_label_ids(token_labels_a, token_labels_b, token_labels_history, max_seq_length, model_specs)
-
-            value_dict[slot] = example.values[slot]
-            inform_dict[slot] = example.inform_label[slot]
-
-            class_label_mod, start_pos_dict[slot], end_pos_dict[slot] = _get_start_end_pos(
-                example.class_label[slot], token_label_ids, max_seq_length)
-            if class_label_mod != example.class_label[slot]:
-                example.class_label[slot] = class_label_mod
-            inform_slot_dict[slot] = example.inform_slot_label[slot]
-            refer_id_dict[slot] = refer_list.index(example.refer_label[slot])
-            diag_state_dict[slot] = class_types.index(example.diag_state[slot])
-            class_label_id_dict[slot] = class_types.index(example.class_label[slot])
-
-        if input_text_too_long:
-            too_long_cnt += 1
-            
-        tokens, input_ids, input_mask, segment_ids = _get_transformer_input(tokens_a,
-                                                                            tokens_b,
-                                                                            tokens_history,
-                                                                            max_seq_length,
-                                                                            tokenizer,
-                                                                            model_specs)
-        if slot_value_dropout > 0.0:
-            _, input_ids_unmasked, _, _ = _get_transformer_input(tokens_a_unmasked,
-                                                                 tokens_b_unmasked,
-                                                                 tokens_history_unmasked,
-                                                                 max_seq_length,
-                                                                 tokenizer,
-                                                                 model_specs)
-        else:
-            input_ids_unmasked = input_ids
-
-        assert(len(input_ids) == len(input_ids_unmasked))
-
-        if example_index < 10:
-            logger.info("*** Example ***")
-            logger.info("guid: %s" % (example.guid))
-            logger.info("tokens: %s" % " ".join(tokens))
-            logger.info("input_ids: %s" % " ".join([str(x) for x in input_ids]))
-            logger.info("input_mask: %s" % " ".join([str(x) for x in input_mask]))
-            logger.info("segment_ids: %s" % " ".join([str(x) for x in segment_ids]))
-            logger.info("start_pos: %s" % str(start_pos_dict))
-            logger.info("end_pos: %s" % str(end_pos_dict))
-            logger.info("values: %s" % str(value_dict))
-            logger.info("inform: %s" % str(inform_dict))
-            logger.info("inform_slot: %s" % str(inform_slot_dict))
-            logger.info("refer_id: %s" % str(refer_id_dict))
-            logger.info("diag_state: %s" % str(diag_state_dict))
-            logger.info("class_label_id: %s" % str(class_label_id_dict))
-            logger.info("initial_node_matrix: %s" % " ".join([str(x) for x in initial_node_matrix]))
-
-        features.append(
-            InputFeatures(
-                guid=example.guid,
-                input_ids=input_ids,
-                input_ids_unmasked=input_ids_unmasked,
-                input_mask=input_mask,
-                segment_ids=segment_ids,
-                start_pos=start_pos_dict,
-                end_pos=end_pos_dict,
-                values=value_dict,
-                inform=inform_dict,
-                inform_slot=inform_slot_dict,
-                refer_id=refer_id_dict,
-                diag_state=diag_state_dict,
-                class_label_id=class_label_id_dict))
+    except Exception as e:
+        traceback.print_exc()
 
     logger.info("========== %d out of %d examples have text too long" % (too_long_cnt, total_cnt))
 
