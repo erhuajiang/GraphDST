@@ -107,7 +107,7 @@ class InputFeatures(object):
                  refer_id=None,
                  diag_state=None,
                  class_label_id=None,
-                 initial_node_matrix=None,
+                 # initial_node_matrix=None,
                  guid="NONE"):
         self.guid = guid
         self.input_ids = input_ids
@@ -122,7 +122,7 @@ class InputFeatures(object):
         self.refer_id = refer_id
         self.diag_state = diag_state
         self.class_label_id = class_label_id
-        self.initial_node_matrix = initial_node_matrix
+        # self.initial_node_matrix = initial_node_matrix
 
 
 def convert_examples_to_features(examples, slot_list, domain_list, class_types, model_type, tokenizer, max_seq_length, slot_value_dropout=0.0):
