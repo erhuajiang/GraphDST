@@ -223,8 +223,8 @@ def train(args, train_dataset, features, model, tokenizer, processor, continue_f
 
             # print loss
             if step % 10 == 0:
-                print("loss:")
-                print(loss.item())
+                logger.info("loss:")
+                logger.info(loss.item())
             
             tr_loss += loss.item()
             if (step + 1) % args.gradient_accumulation_steps == 0:
