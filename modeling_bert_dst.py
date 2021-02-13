@@ -73,7 +73,7 @@ class BertForDST(BertPreTrainedModel):
             print("****************")
             print(self.class_labels)
             #self.add_module("class_" + slot, nn.Linear(config.hidden_size + aux_dims, self.class_labels))
-            self.add_module("class_" + slot, nn.Linear(config.hidden_size + aux_dims + config.hidden_size, self.class_labels))
+            self.add_module("class_" + slot, nn.Linear(config.hidden_size + aux_dims + config.hidden_size, self.class_labels + 1))
             self.add_module("token_" + slot, nn.Linear(config.hidden_size + config.hidden_size, 2))
             self.add_module("refer_" + slot, nn.Linear(config.hidden_size + aux_dims + config.hidden_size, len(self.slot_list) + 1))
 
