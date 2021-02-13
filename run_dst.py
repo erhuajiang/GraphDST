@@ -288,8 +288,6 @@ def evaluate(args, model, tokenizer, processor, prefix=""):
     with torch.no_grad():
         diag_state = {slot: torch.tensor([0 for _ in range(args.eval_batch_size)]).to(args.device) for slot in model.slot_list}
     for batch in tqdm(eval_dataloader, desc="Evaluating"):
-        print(batch[8])
-        print(batch[6])
         model.eval()
         batch = batch_to_device(batch, args.device)
 
