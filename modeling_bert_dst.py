@@ -70,10 +70,8 @@ class BertForDST(BertPreTrainedModel):
         aux_dims = len(self.slot_list) * (self.class_aux_feats_inform + self.class_aux_feats_ds) # second term is 0, 1 or 2
 
         for slot in self.slot_list:
-            print("****************")
-            print(self.class_labels)
             #self.add_module("class_" + slot, nn.Linear(config.hidden_size + aux_dims, self.class_labels))
-            self.add_module("class_" + slot, nn.Linear(config.hidden_size + aux_dims + config.hidden_size, self.class_labels + 1))
+            self.add_module("class_" + slot, nn.Linear(config.hidden_size + aux_dims + config.hidden_size, self.class_labels))
             self.add_module("token_" + slot, nn.Linear(config.hidden_size + config.hidden_size, 2))
             self.add_module("refer_" + slot, nn.Linear(config.hidden_size + aux_dims + config.hidden_size, len(self.slot_list) + 1))
 
@@ -190,6 +188,7 @@ class BertForDST(BertPreTrainedModel):
                 if not self.token_loss_for_nonpointable:
                     token_loss *= token_is_pointable
 
+                print(refer_logits.data)
                 refer_loss = refer_loss_fct(refer_logits, refer_id[slot])
                 token_is_referrable = torch.eq(class_label_id[slot], self.refer_index).float()
                 if not self.refer_loss_for_nonpointable:
