@@ -24,6 +24,8 @@ from torch import nn
 from torch.nn import CrossEntropyLoss
 import logging
 
+torch.set_printoptions(profile="default") # reset
+
 from transformers.modeling_bert import (BertModel, BertPreTrainedModel, BERT_START_DOCSTRING, BERT_INPUTS_DOCSTRING)
 logger = logging.getLogger(__name__)
 
@@ -188,7 +190,7 @@ class BertForDST(BertPreTrainedModel):
                 if not self.token_loss_for_nonpointable:
                     token_loss *= token_is_pointable
 
-                print(refer_logits.data)
+                print(refer_logits)
                 refer_loss = refer_loss_fct(refer_logits, refer_id[slot])
                 token_is_referrable = torch.eq(class_label_id[slot], self.refer_index).float()
                 if not self.refer_loss_for_nonpointable:
