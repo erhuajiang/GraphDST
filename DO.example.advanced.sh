@@ -19,7 +19,7 @@ OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/multiwoz2.1/
 
 # Main ------------------------------------------------------------
 
-for step in train dev test; do
+for step in dev test; do
     args_add=""
     if [ "$step" = "train" ]; then
 	args_add="--do_train --predict_type=dummy"
@@ -27,7 +27,7 @@ for step in train dev test; do
 	args_add="--do_eval --predict_type=${step}"
     fi
 
-    CUDA_VISIBLE_DEVICES=0 python3 run_dst.py \
+    python3 run_dst.py \
 	    --task_name=${TASK} \
 	    --data_dir=${DATA_DIR} \
 	    --dataset_config=dataset_config/${TASK}.json \
@@ -55,6 +55,7 @@ for step in train dev test; do
 	    --mlm_pre \
 	    --mlm_during \
 	    ${args_add} \
+	    --no_cuda \
         2>&1 | tee ${OUT_DIR}/${step}.log
 
     if [ "$step" = "dev" ] || [ "$step" = "test" ]; then
