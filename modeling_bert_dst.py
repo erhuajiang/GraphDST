@@ -233,6 +233,8 @@ class GraphLayer(nn.Module):
         x = torch.matmul(node_embedding, torch.transpose(node_embedding, 1, 2))
         print(adjacent_matrix.data)
         print(x.data)
+        print(adjacent_matrix.size)
+        print(x.size)
         x[~adjacent_matrix] = float(-10000000)
         att = torch.softmax(x, dim=2)
         w_node_embedding = att.matmul(node_embedding)
