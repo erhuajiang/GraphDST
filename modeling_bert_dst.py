@@ -195,7 +195,7 @@ class BertForDST(BertPreTrainedModel):
                 if not self.refer_loss_for_nonpointable:
                     refer_loss *= token_is_referrable
                 
-                class_loss = class_loss_fct(class_logits, class_label_id[slot])
+                class_loss = class_loss_fct(class_logits, class_label_id[slot]-1)
 
                 if self.refer_index > -1:
                     per_example_loss = (self.class_loss_ratio) * class_loss + ((1 - self.class_loss_ratio) / 2) * token_loss + ((1 - self.class_loss_ratio) / 2) * refer_loss
