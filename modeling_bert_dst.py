@@ -190,13 +190,12 @@ class BertForDST(BertPreTrainedModel):
                 if not self.token_loss_for_nonpointable:
                     token_loss *= token_is_pointable
 
-                print(refer_logits.cpu().data)
                 refer_loss = refer_loss_fct(refer_logits, refer_id[slot])
                 token_is_referrable = torch.eq(class_label_id[slot], self.refer_index).float()
                 if not self.refer_loss_for_nonpointable:
                     refer_loss *= token_is_referrable
                 
-                class_loss = class_loss_fct(class_logits, class_label_id[slot])
+                class_loss = class_loss_fct(class_logits, class_label_id[slot]-1)
 
                 if self.refer_index > -1:
                     per_example_loss = (self.class_loss_ratio) * class_loss + ((1 - self.class_loss_ratio) / 2) * token_loss + ((1 - self.class_loss_ratio) / 2) * refer_loss
