@@ -70,6 +70,8 @@ class BertForDST(BertPreTrainedModel):
         aux_dims = len(self.slot_list) * (self.class_aux_feats_inform + self.class_aux_feats_ds) # second term is 0, 1 or 2
 
         for slot in self.slot_list:
+            print("****************")
+            print(self.class_labels)
             #self.add_module("class_" + slot, nn.Linear(config.hidden_size + aux_dims, self.class_labels))
             self.add_module("class_" + slot, nn.Linear(config.hidden_size + aux_dims + config.hidden_size, self.class_labels))
             self.add_module("token_" + slot, nn.Linear(config.hidden_size + config.hidden_size, 2))
