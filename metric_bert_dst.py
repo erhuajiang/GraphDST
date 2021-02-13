@@ -366,6 +366,10 @@ if __name__ == "__main__":
         acc_list.append((fp, acc))
 
     acc_list_s = sorted(acc_list, key=lambda tup: tup[1], reverse=True)
+    # for (fp, acc) in acc_list_s:
+    #     import pdb; pdb.set_trace()
+    #     print('Joint goal acc: %g, %s' % (acc, fp))
     for (fp, acc) in acc_list_s:
-        import pdb; pdb.set_trace()
-        print('Joint goal acc: %g, %s' % (acc, fp))
+        print(acc)
+        # import pdb; pdb.set_trace()
+        print('Joint goal acc: %g' % (acc))
