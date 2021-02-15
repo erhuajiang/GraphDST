@@ -519,8 +519,8 @@ def create_examples(input_file, acts_file, set_type, slot_list, domain_list, occ
 
             # schema graph feature
             schema_graph_matrix = initial_node_matrix.copy()
-            for slot_i, value_i in diag_seen_slots_value_dict:
-                for slot_j, value_j in diag_seen_slots_value_dict:
+            for slot_i, value_i in diag_seen_slots_value_dict.items():
+                for slot_j, value_j in diag_seen_slots_value_dict.items():
                     # refer
                     if value_i == value_j and value_i != "none" and value_i != "true" and value_i != "false" and value_i != "dontcare":
                         index_i = node_list.index(slot_i)
