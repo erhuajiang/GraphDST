@@ -1293,5 +1293,47 @@
     "stevenage train station": [
       "stevenage"
     ]
-  }
+  },
+  "occur_list": [
+    "train-destination&train-leaveAt",
+    "train-day&train-leaveAt",
+    "train-arriveBy&train-leaveAt",
+    "train-departure&train-leaveAt",
+    "train-day&train-destination",
+    "train-arriveBy&train-destination",
+    "train-departure&train-destination",
+    "train-arriveBy&train-day",
+    "train-day&train-departure",
+    "train-arriveBy&train-departure",
+    "attraction-name&attraction-type",
+    "attraction-area&attraction-type",
+    "attraction-area&attraction-name",
+    "restaurant-food&restaurant-pricerange",
+    "restaurant-food&restaurant-name",
+    "restaurant-area&restaurant-food",
+    "restaurant-name&restaurant-pricerange",
+    "restaurant-area&restaurant-pricerange",
+    "restaurant-area&restaurant-name",
+    "hotel-area&hotel-name",
+    "hotel-name&hotel-parking",
+    "hotel-name&hotel-pricerange",
+    "hotel-name&hotel-stars",
+    "hotel-internet&hotel-name",
+    "hotel-name&hotel-type",
+    "hotel-area&hotel-parking",
+    "hotel-area&hotel-pricerange",
+    "hotel-area&hotel-stars",
+    "hotel-area&hotel-internet",
+    "hotel-area&hotel-type",
+    "hotel-parking&hotel-pricerange",
+    "hotel-parking&hotel-stars",
+    "hotel-internet&hotel-parking",
+    "hotel-parking&hotel-type",
+    "hotel-pricerange&hotel-stars",
+    "hotel-internet&hotel-pricerange",
+    "hotel-pricerange&hotel-type",
+    "hotel-internet&hotel-stars",
+    "hotel-stars&hotel-type",
+    "hotel-internet&hotel-type"
+  ]
 }

@@ -294,7 +294,7 @@ def tokenize(utt):
     return utt_tok
 
 
-def create_examples(input_file, acts_file, set_type, slot_list, domain_list,
+def create_examples(input_file, acts_file, set_type, slot_list, domain_list, occur_list,
                     label_maps={},
                     append_history=False,
                     use_history_labels=False,
@@ -519,13 +519,20 @@ def create_examples(input_file, acts_file, set_type, slot_list, domain_list,
 
             # schema graph feature
             schema_graph_matrix = initial_node_matrix.copy()
-            print("llllllll")
-            print(diag_seen_slots_value_dict)
-            exit()
-            # for slot_i in slot_list:
-            #     for slot_j in slot_list:
-            #
-            
+            for slot_i, value_i in diag_seen_slots_value_dict:
+                for slot_j, value_j in diag_seen_slots_value_dict:
+                    # refer
+                    if value_i == value_j and value_i != "none" and value_i != "true" and value_i != "false" and value_i != "dontcare":
+                        index_i = node_list.index(slot_i)
+                        index_j = node_list.index(slot_j)
+                        schema_graph_matrix[index_i][index_j] = 1
+                    # occur
+                    if slot_i + "&" + slot_j in occur_list and value_i != "none" and value_j != "none":
+                        index_i = node_list.index(slot_i)
+                        index_j = node_list.index(slot_j)
+                        schema_graph_matrix[index_i][index_j] = 1
+                    # update
+
 
             if analyze:
                 print("]")
