@@ -46,7 +46,8 @@ class DSTExample(object):
                  inform_slot_label=None,
                  refer_label=None,
                  diag_state=None,
-                 class_label=None):
+                 class_label=None,
+                 schema_graph_matrix=None):
         self.guid = guid
         self.text_a = text_a
         self.text_b = text_b
@@ -60,6 +61,7 @@ class DSTExample(object):
         self.refer_label = refer_label
         self.diag_state = diag_state
         self.class_label = class_label
+        self.schema_graph_matrix = schema_graph_matrix
 
     def __str__(self):
         return self.__repr__()
@@ -88,6 +90,8 @@ class DSTExample(object):
             s += ", diag_state: %d" % (self.diag_state)
         if self.class_label:
             s += ", class_label: %d" % (self.class_label)
+        if self.schema_graph_matrix:
+            s += ", schema_graph_matrix: %s" % (self.schema_graph_matrix)
         return s
 
 

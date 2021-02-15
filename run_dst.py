@@ -518,21 +518,21 @@ def load_and_cache_examples(args, model, tokenizer, processor, evaluate=False):
     if args.local_rank == 0 and not evaluate:
         torch.distributed.barrier()  # Make sure only the first process in distributed training process the dataset, and the others will use the cache
 
-    # schema graph feature
-    node_list = model.domain_list + model.slot_list
-    initial_node_matrix = []
-    for x_node in node_list:
-        node_row = [0] * len(node_list)
-        for y_id, y_node in enumerate(node_list):
-            if len(x_node.split("-")) == 1 and len(y_node.split("-")) == 1:
-                node_row[y_id] = 1
-            elif len(x_node.split("-")) == 1 and len(y_node.split("-")) == 2 and x_node in y_node:
-                node_row[y_id] = 1
-            elif len(x_node.split("-")) == 2 and len(y_node.split("-")) == 1 and y_node in x_node:
-                node_row[y_id] = 1
-            else:
-                node_row[y_id] = 0
-        initial_node_matrix.append(node_row)
+    # # schema graph feature
+    # node_list = model.domain_list + model.slot_list
+    # initial_node_matrix = []
+    # for x_node in node_list:
+    #     node_row = [0] * len(node_list)
+    #     for y_id, y_node in enumerate(node_list):
+    #         if len(x_node.split("-")) == 1 and len(y_node.split("-")) == 1:
+    #             node_row[y_id] = 1
+    #         elif len(x_node.split("-")) == 1 and len(y_node.split("-")) == 2 and x_node in y_node:
+    #             node_row[y_id] = 1
+    #         elif len(x_node.split("-")) == 2 and len(y_node.split("-")) == 1 and y_node in x_node:
+    #             node_row[y_id] = 1
+    #         else:
+    #             node_row[y_id] = 0
+    #     initial_node_matrix.append(node_row)
     
     
     # Convert to Tensors and build dataset

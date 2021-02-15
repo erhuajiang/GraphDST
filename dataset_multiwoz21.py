@@ -532,6 +532,21 @@ def create_examples(input_file, acts_file, set_type, slot_list, domain_list, occ
                         index_j = node_list.index(slot_j)
                         schema_graph_matrix[index_i][index_j] = 1
                     # update
+                    if i == 1:
+                        continue
+                    else:
+                        if slot_i in pre_diag_seen_slots_value_dict:
+                            pre_value_i = pre_diag_seen_slots_value_dict[slot_i]
+                        else:
+                            pre_value_i = "none"
+                        if slot_j in pre_diag_seen_slots_value_dict:
+                            pre_value_j = pre_diag_seen_slots_value_dict[slot_j]
+                        else:
+                            pre_value_j = "none"
+                        if pre_value_i != value_i and pre_value_j != value_j:
+                            index_i = node_list.index(slot_i)
+                            index_j = node_list.index(slot_j)
+                            schema_graph_matrix[index_i][index_j] = 1
 
 
             if analyze:
@@ -560,11 +575,14 @@ def create_examples(input_file, acts_file, set_type, slot_list, domain_list, occ
                 inform_slot_label=inform_slot_dict,
                 refer_label=referral_dict,
                 diag_state=diag_state,
-                class_label=class_type_dict))
+                class_label=class_type_dict,
+                schema_graph_matrix=schema_graph_matrix
+            ))
 
             # Update some variables.
             hst_utt_tok_label_dict = new_hst_utt_tok_label_dict.copy()
             diag_state = new_diag_state.copy()
+            pre_diag_seen_slots_value_dict = diag_seen_slots_value_dict.copy()
 
             turn_itr += 1
 
