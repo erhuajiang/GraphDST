@@ -9,17 +9,17 @@
 #TASK="woz2"
 #DATA_DIR="data/woz2"
 TASK="multiwoz21"
-DATA_DIR="/home/yfeng/graph-DST/dataset/MULTIWOZ2.1"
-#DATA_DIR="/home/yfeng/graph-DST/GraphDST/data"
+#DATA_DIR="/home/yfeng/graph-DST/dataset/MULTIWOZ2.1"
+DATA_DIR="/home/yfeng/graph-DST/GraphDST/data"
 
 # Project paths etc. ----------------------------------------------
 
-OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/multiwoz2.1/
-#OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/test/
+#OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/multiwoz2.1_loss/
+OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/test/
 
 # Main ------------------------------------------------------------
 
-for step in dev test; do
+for step in train dev test; do
     args_add=""
     if [ "$step" = "train" ]; then
 	args_add="--do_train --predict_type=dummy"
@@ -55,7 +55,7 @@ for step in dev test; do
 	    --mlm_pre \
 	    --mlm_during \
 	    ${args_add} \
-	    # --no_cuda \
+	    --no_cuda \
         2>&1 | tee ${OUT_DIR}/${step}.log
 
     if [ "$step" = "dev" ] || [ "$step" = "test" ]; then
