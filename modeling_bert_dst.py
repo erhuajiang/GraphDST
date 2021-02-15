@@ -146,7 +146,7 @@ class BertForDST(BertPreTrainedModel):
         schema_graph_loss_fct = CrossEntropyLoss(reduction='none')
         re_schema_graph_structure_logits = torch.reshape(schema_graph_structure_logits, (-1, 1))
         re_schema_graph_structure_logits = torch.cat((1-re_schema_graph_structure_logits, re_schema_graph_structure_logits), 1)
-        re_schema_graph_matrix = torch.reshape(schema_graph_matrix, (-1, 1))
+        re_schema_graph_matrix = torch.reshape(schema_graph_matrix, (-1))
         schema_graph_loss = schema_graph_loss_fct(re_schema_graph_structure_logits, re_schema_graph_matrix)
 
         for slot_id, slot in enumerate(self.slot_list):
