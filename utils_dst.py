@@ -111,7 +111,7 @@ class InputFeatures(object):
                  refer_id=None,
                  diag_state=None,
                  class_label_id=None,
-                 # initial_node_matrix=None,
+                 schema_graph_matrix=None,
                  guid="NONE"):
         self.guid = guid
         self.input_ids = input_ids
@@ -126,7 +126,7 @@ class InputFeatures(object):
         self.refer_id = refer_id
         self.diag_state = diag_state
         self.class_label_id = class_label_id
-        # self.initial_node_matrix = initial_node_matrix
+        self.schema_graph_matrix = schema_graph_matrix
 
 
 def convert_examples_to_features(examples, slot_list, domain_list, class_types, model_type, tokenizer, max_seq_length, slot_value_dropout=0.0):
@@ -296,21 +296,21 @@ def convert_examples_to_features(examples, slot_list, domain_list, class_types, 
 
     features = []
     
-    # schema graph feature
-    node_list = domain_list + slot_list
-    initial_node_matrix = []
-    for x_node in node_list:
-        node_row = [0] * len(node_list)
-        for y_id, y_node in enumerate(node_list):
-            if len(x_node.split("-")) == 1 and len(y_node.split("-")) == 1:
-                node_row[y_id] = 1
-            elif len(x_node.split("-")) == 1 and len(y_node.split("-")) == 2 and x_node in y_node:
-                node_row[y_id] = 1
-            elif len(x_node.split("-")) == 2 and len(y_node.split("-")) == 1 and y_node in x_node:
-                node_row[y_id] = 1
-            else:
-                node_row[y_id] = 0
-        initial_node_matrix.append(node_row)
+    # # schema graph feature
+    # node_list = domain_list + slot_list
+    # initial_node_matrix = []
+    # for x_node in node_list:
+    #     node_row = [0] * len(node_list)
+    #     for y_id, y_node in enumerate(node_list):
+    #         if len(x_node.split("-")) == 1 and len(y_node.split("-")) == 1:
+    #             node_row[y_id] = 1
+    #         elif len(x_node.split("-")) == 1 and len(y_node.split("-")) == 2 and x_node in y_node:
+    #             node_row[y_id] = 1
+    #         elif len(x_node.split("-")) == 2 and len(y_node.split("-")) == 1 and y_node in x_node:
+    #             node_row[y_id] = 1
+    #         else:
+    #             node_row[y_id] = 0
+    #     initial_node_matrix.append(node_row)
 
     
     # Convert single example
@@ -411,7 +411,7 @@ def convert_examples_to_features(examples, slot_list, domain_list, class_types, 
             logger.info("refer_id: %s" % str(refer_id_dict))
             logger.info("diag_state: %s" % str(diag_state_dict))
             logger.info("class_label_id: %s" % str(class_label_id_dict))
-            logger.info("initial_node_matrix: %s" % " ".join([str(x) for x in initial_node_matrix]))
+            logger.info("schema_graph_matrix: %s" % " ".join([str(x) for x in example.schema_graph_matrix]))
 
         features.append(
             InputFeatures(
@@ -427,7 +427,8 @@ def convert_examples_to_features(examples, slot_list, domain_list, class_types, 
                 inform_slot=inform_slot_dict,
                 refer_id=refer_id_dict,
                 diag_state=diag_state_dict,
-                class_label_id=class_label_id_dict))
+                class_label_id=class_label_id_dict,
+                schema_graph_matrix=example.schema_graph_matrix))
 
     
 

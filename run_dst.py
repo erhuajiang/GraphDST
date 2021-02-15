@@ -204,7 +204,8 @@ def train(args, train_dataset, features, model, tokenizer, processor, continue_f
                       'diag_state':      batch[7],
                       'class_label_id':  batch[8],
                       'initial_node_matrix': batch[10],
-                      'slot_id': batch[11]}
+                      'schema_graph_matrix': batch[11],
+                      'slot_id': batch[12]}
             outputs = model(**inputs)
             loss = outputs[0]  # model outputs are always tuple in pytorch-transformers (see doc)
 
@@ -309,7 +310,8 @@ def evaluate(args, model, tokenizer, processor, prefix=""):
                       'diag_state':      diag_state,
                       'class_label_id':  batch[8],
                       'initial_node_matrix': batch[10],
-                      'slot_id': batch[11]}
+                      'schema_graph_matrix': batch[11],
+                      'slot_id': batch[12]}
             unique_ids = [features[i.item()].guid for i in batch[9]]
             values = [features[i.item()].values for i in batch[9]]
             input_ids_unmasked = [features[i.item()].input_ids_unmasked for i in batch[9]]
@@ -518,21 +520,21 @@ def load_and_cache_examples(args, model, tokenizer, processor, evaluate=False):
     if args.local_rank == 0 and not evaluate:
         torch.distributed.barrier()  # Make sure only the first process in distributed training process the dataset, and the others will use the cache
 
-    # # schema graph feature
-    # node_list = model.domain_list + model.slot_list
-    # initial_node_matrix = []
-    # for x_node in node_list:
-    #     node_row = [0] * len(node_list)
-    #     for y_id, y_node in enumerate(node_list):
-    #         if len(x_node.split("-")) == 1 and len(y_node.split("-")) == 1:
-    #             node_row[y_id] = 1
-    #         elif len(x_node.split("-")) == 1 and len(y_node.split("-")) == 2 and x_node in y_node:
-    #             node_row[y_id] = 1
-    #         elif len(x_node.split("-")) == 2 and len(y_node.split("-")) == 1 and y_node in x_node:
-    #             node_row[y_id] = 1
-    #         else:
-    #             node_row[y_id] = 0
-    #     initial_node_matrix.append(node_row)
+    # schema graph feature
+    node_list = model.domain_list + model.slot_list
+    initial_node_matrix = []
+    for x_node in node_list:
+        node_row = [0] * len(node_list)
+        for y_id, y_node in enumerate(node_list):
+            if len(x_node.split("-")) == 1 and len(y_node.split("-")) == 1:
+                node_row[y_id] = 1
+            elif len(x_node.split("-")) == 1 and len(y_node.split("-")) == 2 and x_node in y_node:
+                node_row[y_id] = 1
+            elif len(x_node.split("-")) == 2 and len(y_node.split("-")) == 1 and y_node in x_node:
+                node_row[y_id] = 1
+            else:
+                node_row[y_id] = 0
+        initial_node_matrix.append(node_row)
     
     
     # Convert to Tensors and build dataset
@@ -546,6 +548,7 @@ def load_and_cache_examples(args, model, tokenizer, processor, evaluate=False):
     f_refer_ids = [f.refer_id for f in features]
     f_diag_state = [f.diag_state for f in features]
     f_class_label_ids = [f.class_label_id for f in features]
+    all_schema_graph_matrix = torch.tensor([f.schema_graph_matrix for f in features], dtype=torch.long)
     all_initial_node_matrix = torch.tensor([initial_node_matrix for f in features], dtype=torch.long)
     all_slot_id = torch.tensor([range(len(model.slot_list) + len(model.domain_list)) for f in features], dtype=torch.long)
     all_start_positions = {}
@@ -561,13 +564,18 @@ def load_and_cache_examples(args, model, tokenizer, processor, evaluate=False):
         all_refer_ids[s] = torch.tensor([f[s] for f in f_refer_ids], dtype=torch.long)
         all_diag_state[s] = torch.tensor([f[s] for f in f_diag_state], dtype=torch.long)
         all_class_label_ids[s] = torch.tensor([f[s] for f in f_class_label_ids], dtype=torch.long)
-    dataset = TensorListDataset(all_input_ids, all_input_mask, all_segment_ids,
-                                all_start_positions, all_end_positions,
+    dataset = TensorListDataset(all_input_ids,
+                                all_input_mask,
+                                all_segment_ids,
+                                all_start_positions,
+                                all_end_positions,
                                 all_inform_slot_ids,
                                 all_refer_ids,
                                 all_diag_state,
-                                all_class_label_ids, all_example_index,
+                                all_class_label_ids,
+                                all_example_index,
                                 all_initial_node_matrix,
+                                all_schema_graph_matrix,
                                 all_slot_id)
 
     return dataset, features
@@ -642,6 +650,9 @@ def main():
                              "Should be a value in [0.0, 1.0]. "
                              "The ratio applied on token loss is (1-class_loss_ratio)/2. "
                              "The ratio applied on refer loss is (1-class_loss_ratio)/2.")
+    parser.add_argument("--schema_loss_ratio", default=0.1, type=float,
+                        help="The ratio applied on schema loss in total loss calculation. "
+                             "Should be a value in [0.0, 1.0]. ")
     parser.add_argument("--token_loss_for_nonpointable", action='store_true',
                         help="Whether the token loss for classes other than copy_value contribute towards total loss.")
     parser.add_argument("--refer_loss_for_nonpointable", action='store_true',
@@ -765,6 +776,7 @@ def main():
     config.dst_dropout_rate = args.dropout_rate
     config.dst_heads_dropout_rate = args.heads_dropout
     config.dst_class_loss_ratio = args.class_loss_ratio
+    config.dst_schema_loss_ratio = args.schema_loss_ratio
     config.dst_token_loss_for_nonpointable = args.token_loss_for_nonpointable
     config.dst_refer_loss_for_nonpointable = args.refer_loss_for_nonpointable
     config.dst_class_aux_feats_inform = args.class_aux_feats_inform

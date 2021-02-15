@@ -41,6 +41,7 @@ class BertForDST(BertPreTrainedModel):
         self.class_aux_feats_inform = config.dst_class_aux_feats_inform
         self.class_aux_feats_ds = config.dst_class_aux_feats_ds
         self.class_loss_ratio = config.dst_class_loss_ratio
+        self.schema_loss_ratio = config.dst_schema_loss_ratio
 
         # Only use refer loss if refer class is present in dataset.
         if 'refer' in self.class_types:
@@ -92,6 +93,7 @@ class BertForDST(BertPreTrainedModel):
                 class_label_id=None,
                 diag_state=None,
                 initial_node_matrix=None,
+                schema_graph_matrix=None,
                 slot_id=None):
         outputs = self.bert(
             input_ids,
@@ -130,7 +132,7 @@ class BertForDST(BertPreTrainedModel):
         # tile_node_embedding_table = node_embedding_table.repeat(real_batch_size, 1, 1)
         initial_node_embedding = self.graph(batch_node_embedding, initial_node_matrix)
         dialogue_aware_node_embedding = self.dialogue_attention(sequence_output, initial_node_embedding)
-        schema_graph_structure = self.add_edge(dialogue_aware_node_embedding, initial_node_matrix)
+        schema_graph_structure, schema_graph_structure_logits = self.add_edge(dialogue_aware_node_embedding, initial_node_matrix)
         new_node_embedding = self.graph(dialogue_aware_node_embedding, schema_graph_structure)
 
         total_loss = 0
@@ -139,6 +141,11 @@ class BertForDST(BertPreTrainedModel):
         per_slot_start_logits = {}
         per_slot_end_logits = {}
         per_slot_refer_logits = {}
+        
+        # schema loss
+        schema_graph_loss_fct = CrossEntropyLoss(reduction='none')
+        schema_graph_loss = schema_graph_loss_fct(schema_graph_structure_logits, schema_graph_matrix)
+
         for slot_id, slot in enumerate(self.slot_list):
             # if self.class_aux_feats_inform and self.class_aux_feats_ds:
             #     pooled_output_aux = torch.cat((pooled_output, self.inform_projection(inform_labels), self.ds_projection(diag_state_labels)), 1)
@@ -181,7 +188,7 @@ class BertForDST(BertPreTrainedModel):
                 class_loss_fct = CrossEntropyLoss(reduction='none')
                 token_loss_fct = CrossEntropyLoss(reduction='none', ignore_index=ignored_index)
                 refer_loss_fct = CrossEntropyLoss(reduction='none')
-
+                
                 start_loss = token_loss_fct(start_logits, start_pos[slot])
                 end_loss = token_loss_fct(end_logits, end_pos[slot])
                 token_loss = (start_loss + end_loss) / 2.0
@@ -204,6 +211,9 @@ class BertForDST(BertPreTrainedModel):
 
                 total_loss += per_example_loss.sum()
                 per_slot_per_example_loss[slot] = per_example_loss
+                
+        # schema loss
+        total_loss += self.schema_loss_ratio * schema_graph_loss.sum()
 
         # add hidden states and attention if they are here
         outputs = (total_loss,) + (per_slot_per_example_loss, per_slot_class_logits, per_slot_start_logits, per_slot_end_logits, per_slot_refer_logits,) + outputs[2:]
@@ -268,4 +278,4 @@ class AddEdge(nn.Module):
         domain_slot = node_matrix[:, :self.domain_num, self.domain_num:]
         slot_domain = node_matrix[:, self.domain_num:, :self.domain_num]
         new_edge = torch.cat((torch.cat((domain_domain, domain_slot), 2), torch.cat((slot_domain, slot_slot), 2)), 1)
-        return new_edge
+        return new_edge, prob
