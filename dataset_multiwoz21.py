@@ -294,7 +294,7 @@ def tokenize(utt):
     return utt_tok
 
 
-def create_examples(input_file, acts_file, set_type, slot_list,
+def create_examples(input_file, acts_file, set_type, slot_list, domain_list,
                     label_maps={},
                     append_history=False,
                     use_history_labels=False,
@@ -311,6 +311,22 @@ def create_examples(input_file, acts_file, set_type, slot_list,
 
     global LABEL_MAPS
     LABEL_MAPS = label_maps
+
+    # initial schema graph feature
+    node_list = domain_list + slot_list
+    initial_node_matrix = []
+    for x_node in node_list:
+        node_row = [0] * len(node_list)
+        for y_id, y_node in enumerate(node_list):
+            if len(x_node.split("-")) == 1 and len(y_node.split("-")) == 1:
+                node_row[y_id] = 1
+            elif len(x_node.split("-")) == 1 and len(y_node.split("-")) == 2 and x_node in y_node:
+                node_row[y_id] = 1
+            elif len(x_node.split("-")) == 2 and len(y_node.split("-")) == 1 and y_node in x_node:
+                node_row[y_id] = 1
+            else:
+                node_row[y_id] = 0
+        initial_node_matrix.append(node_row)
 
     examples = []
     for dialog_id in input_data:
@@ -500,6 +516,16 @@ def create_examples(input_file, acts_file, set_type, slot_list,
                     # some valid class for now...
                     if class_type == 'unpointable':
                         new_diag_state[slot] = 'copy_value'
+
+            # schema graph feature
+            schema_graph_matrix = initial_node_matrix.copy()
+            print("llllllll")
+            print(new_diag_state)
+            exit()
+            # for slot_i in slot_list:
+            #     for slot_j in slot_list:
+            #
+            
 
             if analyze:
                 print("]")

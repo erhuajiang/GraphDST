@@ -66,17 +66,17 @@ class Multiwoz21Processor(DataProcessor):
     def get_train_examples(self, data_dir, args):
         return dataset_multiwoz21.create_examples(os.path.join(data_dir, 'train_dials.json'),
                                                   os.path.join(data_dir, 'dialogue_acts.json'),
-                                                  'train', self.slot_list, self.label_maps, **args)
+                                                  'train', self.slot_list, self.domain_list, self.label_maps, **args)
 
     def get_dev_examples(self, data_dir, args):
         return dataset_multiwoz21.create_examples(os.path.join(data_dir, 'val_dials.json'),
                                                   os.path.join(data_dir, 'dialogue_acts.json'),
-                                                  'dev', self.slot_list, self.label_maps, **args)
+                                                  'dev', self.slot_list, self.domain_list, self.label_maps, **args)
 
     def get_test_examples(self, data_dir, args):
         return dataset_multiwoz21.create_examples(os.path.join(data_dir, 'test_dials.json'),
                                                   os.path.join(data_dir, 'dialogue_acts.json'),
-                                                  'test', self.slot_list, self.label_maps, **args)
+                                                  'test', self.slot_list, self.domain_list, self.label_maps, **args)
 
 
 class SimProcessor(DataProcessor):
