@@ -520,7 +520,7 @@ def create_examples(input_file, acts_file, set_type, slot_list, domain_list,
             # schema graph feature
             schema_graph_matrix = initial_node_matrix.copy()
             print("llllllll")
-            print(new_diag_state)
+            print(diag_seen_slots_value_dict)
             exit()
             # for slot_i in slot_list:
             #     for slot_j in slot_list:
