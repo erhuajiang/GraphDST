@@ -204,8 +204,10 @@ def train(args, train_dataset, features, model, tokenizer, processor, continue_f
                       'diag_state':      batch[7],
                       'class_label_id':  batch[8],
                       'initial_node_matrix': batch[10],
-                      'schema_graph_matrix': batch[11],
-                      'slot_id': batch[12]}
+                      'schema_graph_matrix_refer': batch[11],
+                      'schema_graph_matrix_occur': batch[12],
+                      'schema_graph_matrix_update': batch[13],
+                      'slot_id': batch[14]}
             outputs = model(**inputs)
             loss = outputs[0]  # model outputs are always tuple in pytorch-transformers (see doc)
 
@@ -310,8 +312,10 @@ def evaluate(args, model, tokenizer, processor, prefix=""):
                       'diag_state':      diag_state,
                       'class_label_id':  batch[8],
                       'initial_node_matrix': batch[10],
-                      'schema_graph_matrix': batch[11],
-                      'slot_id': batch[12]}
+                      'schema_graph_matrix_refer': batch[11],
+                      'schema_graph_matrix_occur': batch[12],
+                      'schema_graph_matrix_update': batch[13],
+                      'slot_id': batch[14]}
             unique_ids = [features[i.item()].guid for i in batch[9]]
             values = [features[i.item()].values for i in batch[9]]
             input_ids_unmasked = [features[i.item()].input_ids_unmasked for i in batch[9]]
@@ -548,7 +552,9 @@ def load_and_cache_examples(args, model, tokenizer, processor, evaluate=False):
     f_refer_ids = [f.refer_id for f in features]
     f_diag_state = [f.diag_state for f in features]
     f_class_label_ids = [f.class_label_id for f in features]
-    all_schema_graph_matrix = torch.tensor([f.schema_graph_matrix for f in features], dtype=torch.long)
+    all_schema_graph_matrix_refer = torch.tensor([f.schema_graph_matrix_refer for f in features], dtype=torch.long)
+    all_schema_graph_matrix_occur = torch.tensor([f.schema_graph_matrix_occur for f in features], dtype=torch.long)
+    all_schema_graph_matrix_update = torch.tensor([f.schema_graph_matrix_update for f in features], dtype=torch.long)
     all_initial_node_matrix = torch.tensor([initial_node_matrix for f in features], dtype=torch.long)
     all_slot_id = torch.tensor([range(len(model.slot_list) + len(model.domain_list)) for f in features], dtype=torch.long)
     all_start_positions = {}
@@ -575,7 +581,9 @@ def load_and_cache_examples(args, model, tokenizer, processor, evaluate=False):
                                 all_class_label_ids,
                                 all_example_index,
                                 all_initial_node_matrix,
-                                all_schema_graph_matrix,
+                                all_schema_graph_matrix_refer,
+                                all_schema_graph_matrix_occur,
+                                all_schema_graph_matrix_update,
                                 all_slot_id)
 
     return dataset, features

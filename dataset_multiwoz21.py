@@ -519,19 +519,27 @@ def create_examples(input_file, acts_file, set_type, slot_list, domain_list, occ
 
             # schema graph feature
             # 0: no relation 1: domain-slot 2: refer 3: occur 4: update
-            schema_graph_matrix = initial_node_matrix.copy()
+            schema_graph_matrix_refer = initial_node_matrix.copy()
             for slot_i, value_i in diag_seen_slots_value_dict.items():
                 for slot_j, value_j in diag_seen_slots_value_dict.items():
                     # refer
                     if value_i == value_j and value_i != "none" and value_i != "true" and value_i != "false" and value_i != "dontcare":
                         index_i = node_list.index(slot_i)
                         index_j = node_list.index(slot_j)
-                        schema_graph_matrix[index_i][index_j] = 2
+                        schema_graph_matrix_refer[index_i][index_j] = 1
+                    
+            schema_graph_matrix_occur = initial_node_matrix.copy()
+            for slot_i, value_i in diag_seen_slots_value_dict.items():
+                for slot_j, value_j in diag_seen_slots_value_dict.items():
                     # occur
                     if slot_i + "&" + slot_j in occur_list and value_i != "none" and value_j != "none":
                         index_i = node_list.index(slot_i)
                         index_j = node_list.index(slot_j)
-                        schema_graph_matrix[index_i][index_j] = 3
+                        schema_graph_matrix_occur[index_i][index_j] = 1
+                    
+            schema_graph_matrix_update = initial_node_matrix.copy()
+            for slot_i, value_i in diag_seen_slots_value_dict.items():
+                for slot_j, value_j in diag_seen_slots_value_dict.items():
                     # update
                     if i == 1:
                         continue
@@ -547,8 +555,7 @@ def create_examples(input_file, acts_file, set_type, slot_list, domain_list, occ
                         if pre_value_i != value_i and pre_value_j != value_j:
                             index_i = node_list.index(slot_i)
                             index_j = node_list.index(slot_j)
-                            schema_graph_matrix[index_i][index_j] = 4
-
+                            schema_graph_matrix_update[index_i][index_j] = 1
 
             if analyze:
                 print("]")
@@ -577,7 +584,9 @@ def create_examples(input_file, acts_file, set_type, slot_list, domain_list, occ
                 refer_label=referral_dict,
                 diag_state=diag_state,
                 class_label=class_type_dict,
-                schema_graph_matrix=schema_graph_matrix
+                schema_graph_matrix_refer=schema_graph_matrix_refer,
+                schema_graph_matrix_occur=schema_graph_matrix_occur,
+                schema_graph_matrix_update=schema_graph_matrix_update
             ))
 
             # Update some variables.

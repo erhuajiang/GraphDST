@@ -57,10 +57,10 @@ class BertForDST(BertPreTrainedModel):
         self.node_table = NodeTable(config)
         
         # node representation
-        self.graph = GraphLayer()
+        self.graph = GraphLayer(config)
         
         # dialogue attention
-        self.dialogue_attention = DialogueAtt()
+        self.dialogue_attention = DialogueAtt(config)
         
         # add edge
         self.add_edge = AddEdge(config)
@@ -93,7 +93,9 @@ class BertForDST(BertPreTrainedModel):
                 class_label_id=None,
                 diag_state=None,
                 initial_node_matrix=None,
-                schema_graph_matrix=None,
+                schema_graph_matrix_refer=None,
+                schema_graph_matrix_occur=None,
+                schema_graph_matrix_update=None,
                 slot_id=None):
         outputs = self.bert(
             input_ids,
@@ -239,25 +241,55 @@ class NodeTable(nn.Module):
 
 class GraphLayer(nn.Module):
     
-    def __init__(self, **kwargs):
-        super(GraphLayer, self).__init__(**kwargs)
-        
+    def __init__(self, config):
+        super(GraphLayer, self).__init__()
+        self.params_1 = nn.Parameter(torch.randn(config.hidden_size, config.hidden_size))
+        self.params_2 = nn.Parameter(torch.randn(config.hidden_size, config.hidden_size))
+        self.params_3 = nn.Parameter(torch.randn(config.hidden_size, config.hidden_size))
+        self.params_4 = nn.Parameter(torch.randn(config.hidden_size, config.hidden_size))
+
+        self.params = nn.Parameter(torch.randn(config.hidden_size*4, config.hidden_size))
+
     def forward(self, node_embedding, adjacent_matrix):
-        x = torch.matmul(node_embedding, torch.transpose(node_embedding, 1, 2))
-        bool_adjacent_matrix = torch.gt(adjacent_matrix, 0)
-        x[~bool_adjacent_matrix] = float(-10000000)
-        att = torch.softmax(x, dim=2)
-        w_node_embedding = att.matmul(node_embedding)
+        x_1 = torch.matmul(node_embedding.matmul(self.params_1), torch.transpose(node_embedding, 1, 2))
+        x_2 = torch.matmul(node_embedding.matmul(self.params_2), torch.transpose(node_embedding, 1, 2))
+        x_3 = torch.matmul(node_embedding.matmul(self.params_3), torch.transpose(node_embedding, 1, 2))
+        x_4 = torch.matmul(node_embedding.matmul(self.params_4), torch.transpose(node_embedding, 1, 2))
+
+        bool_adjacent_matrix_1 = torch.eq(adjacent_matrix, 1)
+        bool_adjacent_matrix_2 = torch.eq(adjacent_matrix, 2)
+        bool_adjacent_matrix_3 = torch.eq(adjacent_matrix, 3)
+        bool_adjacent_matrix_4 = torch.eq(adjacent_matrix, 4)
+
+        x_1[~bool_adjacent_matrix_1] = float(-10000000)
+        att_1 = torch.softmax(x_1, dim=2)
+        w_node_embedding_1 = att_1.matmul(node_embedding)
+
+        x_2[~bool_adjacent_matrix_2] = float(-10000000)
+        att_2 = torch.softmax(x_2, dim=2)
+        w_node_embedding_2 = att_2.matmul(node_embedding)
+
+        x_3[~bool_adjacent_matrix_3] = float(-10000000)
+        att_3 = torch.softmax(x_3, dim=2)
+        w_node_embedding_3 = att_3.matmul(node_embedding)
+
+        x_4[~bool_adjacent_matrix_4] = float(-10000000)
+        att_4 = torch.softmax(x_4, dim=2)
+        w_node_embedding_4 = att_4.matmul(node_embedding)
+
+        w_node_embedding = torch.cat((w_node_embedding_1, w_node_embedding_2, w_node_embedding_3, w_node_embedding_4), 2).matmul(self.params)
+
         return w_node_embedding
     
 
 class DialogueAtt(nn.Module):
     
-    def __init__(self, **kwargs):
-        super(DialogueAtt, self).__init__(**kwargs)
-        
+    def __init__(self, config):
+        super(DialogueAtt, self).__init__()
+        self.params = nn.Parameter(torch.randn(config.hidden_size, config.hidden_size))
+
     def forward(self, token, node):
-        att = torch.softmax(node.matmul(torch.transpose(token, 1, 2)), dim=2)
+        att = torch.softmax(node.matmul(self.params).matmul(torch.transpose(token, 1, 2)), dim=2)
         w_node_embedding = att.matmul(token)
         return w_node_embedding
 
@@ -269,12 +301,14 @@ class AddEdge(nn.Module):
         self.domain_num = len(config.dst_domain_list)
         self.slot_num = len(config.dst_slot_list)
         self.node_num = self.domain_num + self.slot_num
-        self.params = nn.Parameter(torch.randn(config.hidden_size, config.hidden_size))
+        self.params_2 = nn.Parameter(torch.randn(config.hidden_size, config.hidden_size))
+        self.params_3 = nn.Parameter(torch.randn(config.hidden_size, config.hidden_size))
+        self.params_4 = nn.Parameter(torch.randn(config.hidden_size, config.hidden_size))
 
     def forward(self, node, node_matrix):
-        prob = torch.sigmoid(node.matmul(self.params).matmul(torch.transpose(node, 1, 2)))
-        pred = (prob > 0.5).float()
-        slot_slot_pred = pred[:, self.domain_num:, self.domain_num:]
+        prob_2 = torch.sigmoid(node.matmul(self.params_2).matmul(torch.transpose(node, 1, 2)))
+        pred_2 = (prob_2 > 0.5).float()
+        slot_slot_pred = pred_2[:, self.domain_num:, self.domain_num:]
         slot_slot_initial = node_matrix[:, self.domain_num:, self.domain_num:]
         slot_slot = ((slot_slot_pred + slot_slot_initial) >= 1).long()
         domain_domain = node_matrix[:, :self.domain_num, :self.domain_num]

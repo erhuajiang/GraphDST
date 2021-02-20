@@ -47,7 +47,9 @@ class DSTExample(object):
                  refer_label=None,
                  diag_state=None,
                  class_label=None,
-                 schema_graph_matrix=None):
+                 schema_graph_matrix_refer=None,
+                 schema_graph_matrix_occur=None,
+                 schema_graph_matrix_update=None):
         self.guid = guid
         self.text_a = text_a
         self.text_b = text_b
@@ -61,7 +63,9 @@ class DSTExample(object):
         self.refer_label = refer_label
         self.diag_state = diag_state
         self.class_label = class_label
-        self.schema_graph_matrix = schema_graph_matrix
+        self.schema_graph_matrix_refer = schema_graph_matrix_refer
+        self.schema_graph_matrix_occur = schema_graph_matrix_occur
+        self.schema_graph_matrix_update = schema_graph_matrix_update
 
     def __str__(self):
         return self.__repr__()
@@ -90,8 +94,13 @@ class DSTExample(object):
             s += ", diag_state: %d" % (self.diag_state)
         if self.class_label:
             s += ", class_label: %d" % (self.class_label)
-        if self.schema_graph_matrix:
-            s += ", schema_graph_matrix: %s" % (self.schema_graph_matrix)
+        if self.schema_graph_matrix_refer:
+            s += ", schema_graph_matrix_refer: %s" % (self.schema_graph_matrix_refer)
+        if self.schema_graph_matrix_occur:
+            s += ", schema_graph_matrix_occur: %s" % (self.schema_graph_matrix_occur)
+        if self.schema_graph_matrix_update:
+            s += ", schema_graph_matrix_update: %s" % (self.schema_graph_matrix_update)
+
         return s
 
 
@@ -111,7 +120,9 @@ class InputFeatures(object):
                  refer_id=None,
                  diag_state=None,
                  class_label_id=None,
-                 schema_graph_matrix=None,
+                 schema_graph_matrix_refer=None,
+                 schema_graph_matrix_occur=None,
+                 schema_graph_matrix_update=None,
                  guid="NONE"):
         self.guid = guid
         self.input_ids = input_ids
@@ -126,7 +137,9 @@ class InputFeatures(object):
         self.refer_id = refer_id
         self.diag_state = diag_state
         self.class_label_id = class_label_id
-        self.schema_graph_matrix = schema_graph_matrix
+        self.schema_graph_matrix_refer = schema_graph_matrix_refer
+        self.schema_graph_matrix_occur = schema_graph_matrix_occur
+        self.schema_graph_matrix_update = schema_graph_matrix_update
 
 
 def convert_examples_to_features(examples, slot_list, domain_list, class_types, model_type, tokenizer, max_seq_length, slot_value_dropout=0.0):
@@ -428,7 +441,9 @@ def convert_examples_to_features(examples, slot_list, domain_list, class_types, 
                 refer_id=refer_id_dict,
                 diag_state=diag_state_dict,
                 class_label_id=class_label_id_dict,
-                schema_graph_matrix=example.schema_graph_matrix))
+                schema_graph_matrix_refer=example.schema_graph_matrix_refer,
+                schema_graph_matrix_occur=example.schema_graph_matrix_occur,
+                schema_graph_matrix_update=example.schema_graph_matrix_update))
 
     
 
