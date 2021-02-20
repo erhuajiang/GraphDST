@@ -132,10 +132,12 @@ class BertForDST(BertPreTrainedModel):
         batch_node_embedding = node_embedding_table(slot_id)
         # real_batch_size = self.config.dst_batch_size
         # tile_node_embedding_table = node_embedding_table.repeat(real_batch_size, 1, 1)
-        initial_node_embedding = self.graph(batch_node_embedding, initial_node_matrix)
+        initial_node_embedding = self.graph(batch_node_embedding, initial_node_matrix, initial_node_matrix, initial_node_matrix)
         dialogue_aware_node_embedding = self.dialogue_attention(sequence_output, initial_node_embedding)
-        schema_graph_structure, schema_graph_structure_logits = self.add_edge(dialogue_aware_node_embedding, initial_node_matrix)
-        new_node_embedding = self.graph(dialogue_aware_node_embedding, schema_graph_structure)
+        # schema_graph_structure, schema_graph_structure_logits = self.add_edge(dialogue_aware_node_embedding, initial_node_matrix)
+        schema_graph_structure_refer, schema_graph_structure_occur, schema_graph_structure_update, \
+        schema_graph_structure_logits_refer, schema_graph_structure_logits_occur, schema_graph_structure_logits_update = self.add_edge(dialogue_aware_node_embedding, initial_node_matrix)
+        new_node_embedding = self.graph(dialogue_aware_node_embedding, schema_graph_structure_refer, schema_graph_structure_occur, schema_graph_structure_update)
 
         total_loss = 0
         per_slot_per_example_loss = {}
@@ -145,11 +147,27 @@ class BertForDST(BertPreTrainedModel):
         per_slot_refer_logits = {}
         
         # schema loss
-        schema_graph_loss_fct = CrossEntropyLoss(reduction='none')
-        re_schema_graph_structure_logits = torch.reshape(schema_graph_structure_logits, (-1, 1))
-        re_schema_graph_structure_logits = torch.cat((1-re_schema_graph_structure_logits, re_schema_graph_structure_logits), 1)
-        re_schema_graph_matrix = torch.reshape(schema_graph_matrix, (-1,))
-        schema_graph_loss = schema_graph_loss_fct(re_schema_graph_structure_logits, re_schema_graph_matrix)
+        schema_graph_refer_loss_fct = CrossEntropyLoss(reduction='none')
+        re_schema_graph_structure_logits_refer = torch.reshape(schema_graph_structure_logits_refer, (-1, 1))
+        re_schema_graph_structure_logits_refer = torch.cat((1-re_schema_graph_structure_logits_refer, re_schema_graph_structure_logits_refer), 1)
+        re_schema_graph_matrix_refer = torch.reshape(schema_graph_matrix_refer, (-1,))
+        schema_graph_refer_loss = schema_graph_refer_loss_fct(re_schema_graph_structure_logits_refer, re_schema_graph_matrix_refer)
+
+        schema_graph_occur_loss_fct = CrossEntropyLoss(reduction='none')
+        re_schema_graph_structure_logits_occur = torch.reshape(schema_graph_structure_logits_occur, (-1, 1))
+        re_schema_graph_structure_logits_occur = torch.cat(
+            (1 - re_schema_graph_structure_logits_occur, re_schema_graph_structure_logits_occur), 1)
+        re_schema_graph_matrix_occur = torch.reshape(schema_graph_matrix_occur, (-1,))
+        schema_graph_occur_loss = schema_graph_occur_loss_fct(re_schema_graph_structure_logits_occur,
+                                                              re_schema_graph_matrix_occur)
+
+        schema_graph_update_loss_fct = CrossEntropyLoss(reduction='none')
+        re_schema_graph_structure_logits_update = torch.reshape(schema_graph_structure_logits_update, (-1, 1))
+        re_schema_graph_structure_logits_update = torch.cat(
+            (1 - re_schema_graph_structure_logits_update, re_schema_graph_structure_logits_update), 1)
+        re_schema_graph_matrix_update = torch.reshape(schema_graph_matrix_update, (-1,))
+        schema_graph_update_loss = schema_graph_update_loss_fct(re_schema_graph_structure_logits_update,
+                                                              re_schema_graph_matrix_update)
 
         for slot_id, slot in enumerate(self.slot_list):
             # if self.class_aux_feats_inform and self.class_aux_feats_ds:
@@ -218,7 +236,7 @@ class BertForDST(BertPreTrainedModel):
                 per_slot_per_example_loss[slot] = per_example_loss
                 
         # schema loss
-        total_loss += self.schema_loss_ratio * schema_graph_loss.sum()
+        total_loss += self.schema_loss_ratio * (schema_graph_refer_loss.sum() + schema_graph_occur_loss.sum() + schema_graph_update_loss.sum())
 
         # add hidden states and attention if they are here
         outputs = (total_loss,) + (per_slot_per_example_loss, per_slot_class_logits, per_slot_start_logits, per_slot_end_logits, per_slot_refer_logits,) + outputs[2:]
@@ -243,41 +261,34 @@ class GraphLayer(nn.Module):
     
     def __init__(self, config):
         super(GraphLayer, self).__init__()
-        self.params_1 = nn.Parameter(torch.randn(config.hidden_size, config.hidden_size))
-        self.params_2 = nn.Parameter(torch.randn(config.hidden_size, config.hidden_size))
-        self.params_3 = nn.Parameter(torch.randn(config.hidden_size, config.hidden_size))
-        self.params_4 = nn.Parameter(torch.randn(config.hidden_size, config.hidden_size))
+        self.params_refer = nn.Parameter(torch.randn(config.hidden_size, config.hidden_size))
+        self.params_occur = nn.Parameter(torch.randn(config.hidden_size, config.hidden_size))
+        self.params_update = nn.Parameter(torch.randn(config.hidden_size, config.hidden_size))
+        
+        self.params = nn.Parameter(torch.randn(config.hidden_size*3, config.hidden_size))
 
-        self.params = nn.Parameter(torch.randn(config.hidden_size*4, config.hidden_size))
+    def forward(self, node_embedding, adjacent_matrix_refer, adjacent_matrix_occur, adjacent_matrix_update):
+        x_refer = torch.matmul(node_embedding.matmul(self.params_refer), torch.transpose(node_embedding, 1, 2))
+        x_occur = torch.matmul(node_embedding.matmul(self.params_occur), torch.transpose(node_embedding, 1, 2))
+        x_update = torch.matmul(node_embedding.matmul(self.params_update), torch.transpose(node_embedding, 1, 2))
+        
+        bool_adjacent_matrix_refer = torch.eq(adjacent_matrix_refer, 1)
+        bool_adjacent_matrix_occur = torch.eq(adjacent_matrix_occur, 1)
+        bool_adjacent_matrix_update = torch.eq(adjacent_matrix_update, 1)
+        
+        x_refer[~bool_adjacent_matrix_refer] = float(-10000000)
+        att_refer = torch.softmax(x_refer, dim=2)
+        w_node_embedding_refer = att_refer.matmul(node_embedding)
 
-    def forward(self, node_embedding, adjacent_matrix):
-        x_1 = torch.matmul(node_embedding.matmul(self.params_1), torch.transpose(node_embedding, 1, 2))
-        x_2 = torch.matmul(node_embedding.matmul(self.params_2), torch.transpose(node_embedding, 1, 2))
-        x_3 = torch.matmul(node_embedding.matmul(self.params_3), torch.transpose(node_embedding, 1, 2))
-        x_4 = torch.matmul(node_embedding.matmul(self.params_4), torch.transpose(node_embedding, 1, 2))
+        x_occur[~bool_adjacent_matrix_occur] = float(-10000000)
+        att_occur = torch.softmax(x_occur, dim=2)
+        w_node_embedding_occur = att_occur.matmul(node_embedding)
 
-        bool_adjacent_matrix_1 = torch.eq(adjacent_matrix, 1)
-        bool_adjacent_matrix_2 = torch.eq(adjacent_matrix, 2)
-        bool_adjacent_matrix_3 = torch.eq(adjacent_matrix, 3)
-        bool_adjacent_matrix_4 = torch.eq(adjacent_matrix, 4)
+        x_update[~bool_adjacent_matrix_update] = float(-10000000)
+        att_update = torch.softmax(x_update, dim=2)
+        w_node_embedding_update = att_update.matmul(node_embedding)
 
-        x_1[~bool_adjacent_matrix_1] = float(-10000000)
-        att_1 = torch.softmax(x_1, dim=2)
-        w_node_embedding_1 = att_1.matmul(node_embedding)
-
-        x_2[~bool_adjacent_matrix_2] = float(-10000000)
-        att_2 = torch.softmax(x_2, dim=2)
-        w_node_embedding_2 = att_2.matmul(node_embedding)
-
-        x_3[~bool_adjacent_matrix_3] = float(-10000000)
-        att_3 = torch.softmax(x_3, dim=2)
-        w_node_embedding_3 = att_3.matmul(node_embedding)
-
-        x_4[~bool_adjacent_matrix_4] = float(-10000000)
-        att_4 = torch.softmax(x_4, dim=2)
-        w_node_embedding_4 = att_4.matmul(node_embedding)
-
-        w_node_embedding = torch.cat((w_node_embedding_1, w_node_embedding_2, w_node_embedding_3, w_node_embedding_4), 2).matmul(self.params)
+        w_node_embedding = torch.cat((w_node_embedding_refer, w_node_embedding_occur, w_node_embedding_update), 2).matmul(self.params)
 
         return w_node_embedding
     
@@ -301,18 +312,30 @@ class AddEdge(nn.Module):
         self.domain_num = len(config.dst_domain_list)
         self.slot_num = len(config.dst_slot_list)
         self.node_num = self.domain_num + self.slot_num
-        self.params_2 = nn.Parameter(torch.randn(config.hidden_size, config.hidden_size))
-        self.params_3 = nn.Parameter(torch.randn(config.hidden_size, config.hidden_size))
-        self.params_4 = nn.Parameter(torch.randn(config.hidden_size, config.hidden_size))
+        self.params_refer = nn.Parameter(torch.randn(config.hidden_size, config.hidden_size))
+        self.params_occur = nn.Parameter(torch.randn(config.hidden_size, config.hidden_size))
+        self.params_update = nn.Parameter(torch.randn(config.hidden_size, config.hidden_size))
 
     def forward(self, node, node_matrix):
-        prob_2 = torch.sigmoid(node.matmul(self.params_2).matmul(torch.transpose(node, 1, 2)))
-        pred_2 = (prob_2 > 0.5).float()
-        slot_slot_pred = pred_2[:, self.domain_num:, self.domain_num:]
-        slot_slot_initial = node_matrix[:, self.domain_num:, self.domain_num:]
-        slot_slot = ((slot_slot_pred + slot_slot_initial) >= 1).long()
+        prob_refer = torch.sigmoid(node.matmul(self.params_refer).matmul(torch.transpose(node, 1, 2)))
+        pred_refer = (prob_refer > 0.5).float()
+        slot_slot_pred_refer = pred_refer[:, self.domain_num:, self.domain_num:]
+
+        prob_occur = torch.sigmoid(node.matmul(self.params_occur).matmul(torch.transpose(node, 1, 2)))
+        pred_occur = (prob_occur > 0.5).float()
+        slot_slot_pred_occur = pred_occur[:, self.domain_num:, self.domain_num:]
+
+        prob_update = torch.sigmoid(node.matmul(self.params_update).matmul(torch.transpose(node, 1, 2)))
+        pred_update = (prob_update > 0.5).float()
+        slot_slot_pred_update= pred_update[:, self.domain_num:, self.domain_num:]
+
+        # slot_slot_initial = node_matrix[:, self.domain_num:, self.domain_num:]
+        # slot_slot = ((slot_slot_pred + slot_slot_initial) >= 1).long()
         domain_domain = node_matrix[:, :self.domain_num, :self.domain_num]
         domain_slot = node_matrix[:, :self.domain_num, self.domain_num:]
         slot_domain = node_matrix[:, self.domain_num:, :self.domain_num]
-        new_edge = torch.cat((torch.cat((domain_domain, domain_slot), 2), torch.cat((slot_domain, slot_slot), 2)), 1)
-        return new_edge, prob
+        new_edge_refer = torch.cat((torch.cat((domain_domain, domain_slot), 2), torch.cat((slot_domain, slot_slot_pred_refer), 2)), 1)
+        new_edge_occur = torch.cat((torch.cat((domain_domain, domain_slot), 2), torch.cat((slot_domain, slot_slot_pred_occur), 2)), 1)
+        new_edge_update = torch.cat((torch.cat((domain_domain, domain_slot), 2), torch.cat((slot_domain, slot_slot_pred_update), 2)), 1)
+
+        return new_edge_refer, new_edge_occur, new_edge_update, prob_refer, prob_occur, prob_update
