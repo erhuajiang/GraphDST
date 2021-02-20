@@ -10,7 +10,7 @@
 #DATA_DIR="data/woz2"
 TASK="multiwoz21"
 #DATA_DIR="/home/yfeng/graph-DST/dataset/MULTIWOZ2.1"
-DATA_DIR="/home/yfeng/graph-DST/GraphDST/data"
+DATA_DIR="/home/yfeng/graph-DST/GraphDST_multiple/GraphDST/data"
 
 # Project paths etc. ----------------------------------------------
 
