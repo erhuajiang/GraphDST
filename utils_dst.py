@@ -424,7 +424,9 @@ def convert_examples_to_features(examples, slot_list, domain_list, class_types, 
             logger.info("refer_id: %s" % str(refer_id_dict))
             logger.info("diag_state: %s" % str(diag_state_dict))
             logger.info("class_label_id: %s" % str(class_label_id_dict))
-            logger.info("schema_graph_matrix: %s" % " ".join([str(x) for x in example.schema_graph_matrix]))
+            logger.info("schema_graph_matrix_refer: %s" % " ".join([str(x) for x in example.schema_graph_matrix_refer]))
+            logger.info("schema_graph_matrix_occur: %s" % " ".join([str(x) for x in example.schema_graph_matrix_occur]))
+            logger.info("schema_graph_matrix_update: %s" % " ".join([str(x) for x in example.schema_graph_matrix_update]))
 
         features.append(
             InputFeatures(
