@@ -9,13 +9,13 @@
 #TASK="woz2"
 #DATA_DIR="data/woz2"
 TASK="multiwoz21"
-DATA_DIR="/home/yfeng/graph-DST/dataset/MULTIWOZ2.1"
-#DATA_DIR="/home/yfeng/graph-DST/GraphDST/data"
+#DATA_DIR="/home/yfeng/graph-DST/dataset/MULTIWOZ2.1"
+DATA_DIR="/home/yfeng/graph-DST/GraphDST/data"
 
 # Project paths etc. ----------------------------------------------
 
-OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/multiwoz2.1_loss/
-#OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/test/
+#OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/multiwoz2.1_multiple/
+OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/test/
 
 # Main ------------------------------------------------------------
 
@@ -27,7 +27,7 @@ for step in train dev test; do
 	args_add="--do_eval --predict_type=${step}"
     fi
 
-    CUDA_VISIBLE_DEVICES=1 python3 run_dst.py \
+    CUDA_VISIBLE_DEVICES=0 python3 run_dst.py \
 	    --task_name=${TASK} \
 	    --data_dir=${DATA_DIR} \
 	    --dataset_config=dataset_config/${TASK}.json \
