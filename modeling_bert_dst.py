@@ -319,15 +319,15 @@ class AddEdge(nn.Module):
     def forward(self, node, node_matrix):
         prob_refer = torch.sigmoid(node.matmul(self.params_refer).matmul(torch.transpose(node, 1, 2)))
         pred_refer = (prob_refer > 0.5).float()
-        slot_slot_pred_refer = pred_refer[:, self.domain_num:, self.domain_num:]
+        slot_slot_pred_refer = pred_refer[:, self.domain_num:, self.domain_num:].long()
 
         prob_occur = torch.sigmoid(node.matmul(self.params_occur).matmul(torch.transpose(node, 1, 2)))
         pred_occur = (prob_occur > 0.5).float()
-        slot_slot_pred_occur = pred_occur[:, self.domain_num:, self.domain_num:]
+        slot_slot_pred_occur = pred_occur[:, self.domain_num:, self.domain_num:].long()
 
         prob_update = torch.sigmoid(node.matmul(self.params_update).matmul(torch.transpose(node, 1, 2)))
         pred_update = (prob_update > 0.5).float()
-        slot_slot_pred_update= pred_update[:, self.domain_num:, self.domain_num:]
+        slot_slot_pred_update = pred_update[:, self.domain_num:, self.domain_num:].long()
 
         # slot_slot_initial = node_matrix[:, self.domain_num:, self.domain_num:]
         # slot_slot = ((slot_slot_pred + slot_slot_initial) >= 1).long()
