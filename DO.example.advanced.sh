@@ -9,13 +9,13 @@
 #TASK="woz2"
 #DATA_DIR="data/woz2"
 TASK="multiwoz21"
-DATA_DIR="/home/yfeng/graph-DST/dataset/MULTIWOZ2.1"
-#DATA_DIR="/home/yfeng/graph-DST/GraphDST/data"
+#DATA_DIR="/home/yfeng/graph-DST/dataset/MULTIWOZ2.1"
+DATA_DIR="/home/yfeng/graph-DST/GraphDST/data"
 
 # Project paths etc. ----------------------------------------------
 
-OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/multiwoz2.1_loss/
-#OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/test/
+#OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/multiwoz2.1_loss/
+OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/test/
 
 # Main ------------------------------------------------------------
 
@@ -35,12 +35,12 @@ for step in train dev test; do
 	    --model_name_or_path="bert-base-uncased" \
 	    --do_lower_case \
 	    --learning_rate=1e-4 \
-	    --num_train_epochs=50 \
+	    --num_train_epochs=21 \
 	    --max_seq_length=180 \
 	    --per_gpu_train_batch_size=48 \
 	    --per_gpu_eval_batch_size=1 \
 	    --output_dir=${OUT_DIR} \
-	    --save_epochs=20 \
+	    --save_epochs=10 \
 	    --logging_steps=10 \
 	    --warmup_proportion=0.1 \
 	    --adam_epsilon=1e-6 \

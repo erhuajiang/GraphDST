@@ -85,6 +85,8 @@ def check_slot_inform(value_label, inform_label, label_maps):
 
 
 def get_joint_slot_correctness(fp, class_types, label_maps,
+                               key_schema_graph_class_label_id='schema_graph_class_label_id',
+                               key_schema_graph_class_prediction='schema_graph_class_prediction',
                                key_class_label_id='class_label_id',
                                key_class_prediction='class_prediction',
                                key_start_pos='start_pos',
@@ -107,9 +109,17 @@ def get_joint_slot_correctness(fp, class_types, label_maps,
         c_tn = {ct: 0 for ct in range(len(class_types))}
         c_fp = {ct: 0 for ct in range(len(class_types))}
         c_fn = {ct: 0 for ct in range(len(class_types))}
+        
+        #schema graph
+        tp = 0.0
+        tn = 0.0
+        fp = 0.0
+        fn = 0.0
 
         for pred in preds:
             guid = pred['guid']  # List: set_type, dialogue_idx, turn_idx
+            schema_graph_class_label_id = pred[key_schema_graph_class_label_id]
+            schema_graph_class_prediction = pred[key_schema_graph_class_prediction]
             turn_gt_class = pred[key_class_label_id]
             turn_pd_class = pred[key_class_prediction]
             gt_start_pos = pred[key_start_pos]
@@ -123,6 +133,19 @@ def get_joint_slot_correctness(fp, class_types, label_maps,
 
             gt_slot = tokenize(gt_slot)
             pd_slot = tokenize(pd_slot)
+            
+            # schema graph
+            schema_graph_class_label_id = np.reshape(schema_graph_class_label_id, (-1,))
+            schema_graph_class_prediction = np.reshape(schema_graph_class_prediction, (-1,))
+            for gt, pd in zip(schema_graph_class_label_id, schema_graph_class_prediction):
+                if gt == 1 and pd == 1:
+                    tp += 1
+                if gt == 1 and pd == 0:
+                    fn += 1
+                if gt == 0 and pd == 1:
+                    fp += 1
+                if gt == 0 and pd == 0:
+                    tn += 1
 
             # Make sure the true turn labels are contained in the prediction json file!
             joint_gt_slot = gt_slot
@@ -263,13 +286,20 @@ def get_joint_slot_correctness(fp, class_types, label_maps,
                 else:
                     print("---- ", end="")
             print("")
+            
+        # schema graph
+        schema_graph_precision = tp / (tp+fp)
+        schema_graph_recall = tp / (tp+fn)
+        schema_graph_f1 = 2 * schema_graph_precision * schema_graph_recall / (schema_graph_precision + schema_graph_recall)
 
-        return np.asarray(total_correctness), np.asarray(val_correctness), np.asarray(class_correctness), np.asarray(pos_correctness), np.asarray(refer_correctness), np.asarray(confusion_matrix), c_tp, c_tn, c_fp, c_fn
+        return np.asarray(total_correctness), np.asarray(val_correctness), np.asarray(class_correctness), np.asarray(pos_correctness), np.asarray(refer_correctness), np.asarray(confusion_matrix), c_tp, c_tn, c_fp, c_fn, schema_graph_precision, schema_graph_recall, schema_graph_f1
 
 
 if __name__ == "__main__":
     acc_list = []
     acc_list_v = []
+    key_schema_graph_class_label_id = 'schema_graph_class_label_id'
+    key_schema_graph_class_prediction = 'schema_graph_class_prediction'
     key_class_label_id = 'class_label_id_%s'
     key_class_prediction = 'class_prediction_%s'
     key_start_pos = 'start_pos_%s'
@@ -305,7 +335,9 @@ if __name__ == "__main__":
         c_fp = {ct: 0 for ct in range(len(class_types))}
         c_fn = {ct: 0 for ct in range(len(class_types))}
         for slot in slots:
-            tot_cor, joint_val_cor, cls_cor, pos_cor, ref_cor, conf_mat, ctp, ctn, cfp, cfn = get_joint_slot_correctness(fp, class_types, label_maps,
+            tot_cor, joint_val_cor, cls_cor, pos_cor, ref_cor, conf_mat, ctp, ctn, cfp, cfn, schema_graph_precision, schema_graph_recall, schema_graph_f1 = get_joint_slot_correctness(fp, class_types, label_maps,
+                                                             key_schema_graph_class_label_id=(key_schema_graph_class_label_id),
+                                                             key_schema_graph_class_prediction=(key_schema_graph_class_prediction),
                                                              key_class_label_id=(key_class_label_id % slot),
                                                              key_class_prediction=(key_class_prediction % slot),
                                                              key_start_pos=(key_start_pos % slot),
@@ -364,6 +396,11 @@ if __name__ == "__main__":
 
         acc = np.mean(goal_correctness)
         acc_list.append((fp, acc))
+        
+        print(fp)
+        print("schema graph precision: %g", (schema_graph_precision))
+        print("schema graph recall: %g", (schema_graph_recall))
+        print("schema graph f1: %g", (schema_graph_f1))
 
     acc_list_s = sorted(acc_list, key=lambda tup: tup[1], reverse=True)
     # for (fp, acc) in acc_list_s:

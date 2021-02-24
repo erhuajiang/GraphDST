@@ -326,7 +326,7 @@ def evaluate(args, model, tokenizer, processor, prefix=""):
                         diag_state[slot][i] = u
 
         results = eval_metric(model, inputs, outputs[0], outputs[1], outputs[2], outputs[3], outputs[4], outputs[5])
-        preds, ds = predict_and_format(model, tokenizer, inputs, outputs[2], outputs[3], outputs[4], outputs[5], unique_ids, input_ids_unmasked, values, inform, prefix, ds)
+        preds, ds = predict_and_format(model, tokenizer, inputs, outputs[2], outputs[3], outputs[4], outputs[5], unique_ids, input_ids_unmasked, values, inform, prefix, ds, outputs[7], outputs[8])
         all_results.append(results)
         all_preds.append(preds)
 
@@ -405,7 +405,7 @@ def eval_metric(model, features, total_loss, per_slot_per_example_loss, per_slot
     return metric_dict
 
 
-def predict_and_format(model, tokenizer, features, per_slot_class_logits, per_slot_start_logits, per_slot_end_logits, per_slot_refer_logits, ids, input_ids_unmasked, values, inform, prefix, ds):
+def predict_and_format(model, tokenizer, features, per_slot_class_logits, per_slot_start_logits, per_slot_end_logits, per_slot_refer_logits, ids, input_ids_unmasked, values, inform, prefix, ds, schema_graph_gt, schema_graph_pd):
     prediction_list = []
     dialog_state = ds
     for i in range(len(ids)):
@@ -414,6 +414,13 @@ def predict_and_format(model, tokenizer, features, per_slot_class_logits, per_sl
 
         prediction = {}
         prediction_addendum = {}
+        
+        # schema graph
+        schema_graph_class_label = schema_graph_gt[i]
+        schema_graph_class_prediction = schema_graph_pd[i]
+        prediction['schema_graph_class_prediction'] = schema_graph_class_prediction
+        prediction['schema_graph_class_label_id'] = schema_graph_class_label
+        
         for slot in model.slot_list:
             class_logits = per_slot_class_logits[slot][i]
             start_logits = per_slot_start_logits[slot][i]

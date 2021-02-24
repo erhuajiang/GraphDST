@@ -219,7 +219,7 @@ class BertForDST(BertPreTrainedModel):
         total_loss += self.schema_loss_ratio * schema_graph_loss.sum()
 
         # add hidden states and attention if they are here
-        outputs = (total_loss,) + (per_slot_per_example_loss, per_slot_class_logits, per_slot_start_logits, per_slot_end_logits, per_slot_refer_logits,) + outputs[2:]
+        outputs = (total_loss,) + (per_slot_per_example_loss, per_slot_class_logits, per_slot_start_logits, per_slot_end_logits, per_slot_refer_logits,) + outputs[2:] + schema_graph_matrix + schema_graph_structure
 
         return outputs
     
