@@ -326,7 +326,7 @@ def evaluate(args, model, tokenizer, processor, prefix=""):
                         diag_state[slot][i] = u
 
         results = eval_metric(model, inputs, outputs[0], outputs[1], outputs[2], outputs[3], outputs[4], outputs[5])
-        preds, ds = predict_and_format(model, tokenizer, inputs, outputs[2], outputs[3], outputs[4], outputs[5], unique_ids, input_ids_unmasked, values, inform, prefix, ds, outputs[7], outputs[8])
+        preds, ds = predict_and_format(model, tokenizer, inputs, outputs[2], outputs[3], outputs[4], outputs[5], unique_ids, input_ids_unmasked, values, inform, prefix, ds, outputs[6], outputs[7])
         all_results.append(results)
         all_preds.append(preds)
 
