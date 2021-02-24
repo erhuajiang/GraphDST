@@ -288,11 +288,12 @@ def get_joint_slot_correctness(fp, class_types, label_maps,
             print("")
             
         # schema graph
+        schema_graph_acc = (tp + tn) / (tp + tn + fp + fn)
         schema_graph_precision = tp / (tp+fp)
         schema_graph_recall = tp / (tp+fn)
         schema_graph_f1 = 2 * schema_graph_precision * schema_graph_recall / (schema_graph_precision + schema_graph_recall)
 
-        return np.asarray(total_correctness), np.asarray(val_correctness), np.asarray(class_correctness), np.asarray(pos_correctness), np.asarray(refer_correctness), np.asarray(confusion_matrix), c_tp, c_tn, c_fp, c_fn, schema_graph_precision, schema_graph_recall, schema_graph_f1
+        return np.asarray(total_correctness), np.asarray(val_correctness), np.asarray(class_correctness), np.asarray(pos_correctness), np.asarray(refer_correctness), np.asarray(confusion_matrix), c_tp, c_tn, c_fp, c_fn, schema_graph_precision, schema_graph_recall, schema_graph_f1, schema_graph_acc
 
 
 if __name__ == "__main__":
@@ -335,7 +336,7 @@ if __name__ == "__main__":
         c_fp = {ct: 0 for ct in range(len(class_types))}
         c_fn = {ct: 0 for ct in range(len(class_types))}
         for slot in slots:
-            tot_cor, joint_val_cor, cls_cor, pos_cor, ref_cor, conf_mat, ctp, ctn, cfp, cfn, schema_graph_precision, schema_graph_recall, schema_graph_f1 = get_joint_slot_correctness(fp, class_types, label_maps,
+            tot_cor, joint_val_cor, cls_cor, pos_cor, ref_cor, conf_mat, ctp, ctn, cfp, cfn, schema_graph_precision, schema_graph_recall, schema_graph_f1, schema_graph_acc = get_joint_slot_correctness(fp, class_types, label_maps,
                                                              key_schema_graph_class_label_id=(key_schema_graph_class_label_id),
                                                              key_schema_graph_class_prediction=(key_schema_graph_class_prediction),
                                                              key_class_label_id=(key_class_label_id % slot),
@@ -401,6 +402,8 @@ if __name__ == "__main__":
         print("schema graph precision: %g", (schema_graph_precision))
         print("schema graph recall: %g", (schema_graph_recall))
         print("schema graph f1: %g", (schema_graph_f1))
+        print("schema graph acc: %g", (schema_graph_acc))
+        
 
     acc_list_s = sorted(acc_list, key=lambda tup: tup[1], reverse=True)
     # for (fp, acc) in acc_list_s:
