@@ -482,6 +482,18 @@ if __name__ == "__main__":
         print("update schema graph f1: %g", (schema_graph_f1_update))
         print("update schema graph acc: %g", (schema_graph_acc_update))
 
+        schema_graph_precision = (schema_graph_precision_refer + schema_graph_precision_occur + schema_graph_precision_update) / 3
+        schema_graph_recall = (schema_graph_recall_refer + schema_graph_recall_occur + schema_graph_recall_update) / 3
+        schema_graph_f1 = (schema_graph_f1_refer + schema_graph_f1_occur + schema_graph_f1_update) / 3
+        schema_graph_acc = (schema_graph_acc_refer + schema_graph_acc_occur + schema_graph_acc_update) / 3
+
+        print("schema graph precision: %g", (schema_graph_precision))
+        print("schema graph recall: %g", (schema_graph_recall))
+        print("schema graph f1: %g", (schema_graph_f1))
+        print("schema graph acc: %g", (schema_graph_acc))
+        
+        
+
     acc_list_s = sorted(acc_list, key=lambda tup: tup[1], reverse=True)
     # for (fp, acc) in acc_list_s:
     #     import pdb; pdb.set_trace()
