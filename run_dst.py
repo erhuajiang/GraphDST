@@ -418,8 +418,8 @@ def predict_and_format(model, tokenizer, features, per_slot_class_logits, per_sl
         # schema graph
         schema_graph_class_label = schema_graph_gt[i]
         schema_graph_class_prediction = schema_graph_pd[i]
-        prediction['schema_graph_class_prediction'] = schema_graph_class_prediction.numpy()
-        prediction['schema_graph_class_label_id'] = schema_graph_class_label.numpy()
+        prediction['schema_graph_class_prediction'] = schema_graph_class_prediction.cpu().numpy()
+        prediction['schema_graph_class_label_id'] = schema_graph_class_label.cpu().numpy()
         
         for slot in model.slot_list:
             class_logits = per_slot_class_logits[slot][i]
