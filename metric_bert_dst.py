@@ -85,6 +85,12 @@ def check_slot_inform(value_label, inform_label, label_maps):
 
 
 def get_joint_slot_correctness(fp, class_types, label_maps,
+                               key_schema_graph_class_label_id_refer='key_schema_graph_class_label_id_refer',
+                               key_schema_graph_class_prediction_refer='key_schema_graph_class_prediction_refer',
+                               key_schema_graph_class_label_id_occur='key_schema_graph_class_label_id_occur',
+                               key_schema_graph_class_prediction_occur='key_schema_graph_class_prediction_occur',
+                               key_schema_graph_class_label_id_update='key_schema_graph_class_label_id_update',
+                               key_schema_graph_class_prediction_update='key_schema_graph_class_prediction_update',
                                key_class_label_id='class_label_id',
                                key_class_prediction='class_prediction',
                                key_start_pos='start_pos',
@@ -108,8 +114,30 @@ def get_joint_slot_correctness(fp, class_types, label_maps,
         c_fp = {ct: 0 for ct in range(len(class_types))}
         c_fn = {ct: 0 for ct in range(len(class_types))}
 
+        # schema graph
+        tp_refer = 0.0
+        tn_refer = 0.0
+        fp_refer = 0.0
+        fn_refer = 0.0
+
+        tp_occur = 0.0
+        tn_occur = 0.0
+        fp_occur = 0.0
+        fn_occur = 0.0
+
+        tp_update = 0.0
+        tn_update = 0.0
+        fp_update = 0.0
+        fn_update = 0.0
+
         for pred in preds:
             guid = pred['guid']  # List: set_type, dialogue_idx, turn_idx
+            schema_graph_class_label_id_refer = pred[key_schema_graph_class_label_id_refer]
+            schema_graph_class_prediction_refer = pred[key_schema_graph_class_prediction_refer]
+            schema_graph_class_label_id_occur = pred[key_schema_graph_class_label_id_occur]
+            schema_graph_class_prediction_occur = pred[key_schema_graph_class_prediction_occur]
+            schema_graph_class_label_id_update = pred[key_schema_graph_class_label_id_update]
+            schema_graph_class_prediction_update = pred[key_schema_graph_class_prediction_update]
             turn_gt_class = pred[key_class_label_id]
             turn_pd_class = pred[key_class_prediction]
             gt_start_pos = pred[key_start_pos]
@@ -123,6 +151,44 @@ def get_joint_slot_correctness(fp, class_types, label_maps,
 
             gt_slot = tokenize(gt_slot)
             pd_slot = tokenize(pd_slot)
+
+            # schema graph
+            schema_graph_class_label_id_refer = np.reshape(schema_graph_class_label_id_refer, (-1,))
+            schema_graph_class_prediction_refer = np.reshape(schema_graph_class_prediction_refer, (-1,))
+            for gt, pd in zip(schema_graph_class_label_id_refer, schema_graph_class_prediction_refer):
+                if gt == 1 and pd == 1:
+                    tp_refer += 1
+                if gt == 1 and pd == 0:
+                    fn_refer += 1
+                if gt == 0 and pd == 1:
+                    fp_refer += 1
+                if gt == 0 and pd == 0:
+                    tn_refer += 1
+
+            schema_graph_class_label_id_occur = np.reshape(schema_graph_class_label_id_occur, (-1,))
+            schema_graph_class_prediction_occur = np.reshape(schema_graph_class_prediction_occur, (-1,))
+            for gt, pd in zip(schema_graph_class_label_id_occur, schema_graph_class_prediction_occur):
+                if gt == 1 and pd == 1:
+                    tp_occur += 1
+                if gt == 1 and pd == 0:
+                    fn_occur += 1
+                if gt == 0 and pd == 1:
+                    fp_occur += 1
+                if gt == 0 and pd == 0:
+                    tn_occur += 1
+
+            schema_graph_class_label_id_update = np.reshape(schema_graph_class_label_id_update, (-1,))
+            schema_graph_class_prediction_update = np.reshape(schema_graph_class_prediction_update, (-1,))
+            for gt, pd in zip(schema_graph_class_label_id_update, schema_graph_class_prediction_update):
+                if gt == 1 and pd == 1:
+                    tp_update += 1
+                if gt == 1 and pd == 0:
+                    fn_update += 1
+                if gt == 0 and pd == 1:
+                    fp_update += 1
+                if gt == 0 and pd == 0:
+                    tn_update += 1
+
 
             # Make sure the true turn labels are contained in the prediction json file!
             joint_gt_slot = gt_slot
@@ -264,12 +330,40 @@ def get_joint_slot_correctness(fp, class_types, label_maps,
                     print("---- ", end="")
             print("")
 
-        return np.asarray(total_correctness), np.asarray(val_correctness), np.asarray(class_correctness), np.asarray(pos_correctness), np.asarray(refer_correctness), np.asarray(confusion_matrix), c_tp, c_tn, c_fp, c_fn
+        # schema graph
+        schema_graph_acc_refer = (tp_refer + tn_refer) / (tp_refer + tn_refer + fp_refer + fn_refer)
+        schema_graph_precision_refer = tp_refer / (tp_refer + fp_refer)
+        schema_graph_recall_refer = tp_refer / (tp_refer + fn_refer)
+        schema_graph_f1_refer = 2 * schema_graph_precision_refer * schema_graph_recall_refer / (
+        schema_graph_precision_refer + schema_graph_recall_refer)
+
+        schema_graph_acc_occur = (tp_occur + tn_occur) / (tp_occur + tn_occur + fp_occur + fn_occur)
+        schema_graph_precision_occur = tp_occur / (tp_occur + fp_occur)
+        schema_graph_recall_occur = tp_occur / (tp_occur + fn_occur)
+        schema_graph_f1_occur = 2 * schema_graph_precision_occur * schema_graph_recall_occur / (
+            schema_graph_precision_occur + schema_graph_recall_occur)
+
+        schema_graph_acc_update = (tp_update + tn_update) / (tp_update + tn_update + fp_update + fn_update)
+        schema_graph_precision_update = tp_update / (tp_update + fp_update)
+        schema_graph_recall_update = tp_update / (tp_update + fn_update)
+        schema_graph_f1_update = 2 * schema_graph_precision_update * schema_graph_recall_update / (
+            schema_graph_precision_update + schema_graph_recall_update)
+
+        return np.asarray(total_correctness), np.asarray(val_correctness), np.asarray(class_correctness), np.asarray(pos_correctness), np.asarray(refer_correctness), np.asarray(confusion_matrix), c_tp, c_tn, c_fp, c_fn, \
+               schema_graph_precision_refer, schema_graph_recall_refer, schema_graph_f1_refer, schema_graph_acc_refer, \
+               schema_graph_precision_occur, schema_graph_recall_occur, schema_graph_f1_occur, schema_graph_acc_occur, \
+               schema_graph_precision_update, schema_graph_recall_update, schema_graph_f1_update, schema_graph_acc_update
 
 
 if __name__ == "__main__":
     acc_list = []
     acc_list_v = []
+    key_schema_graph_class_label_id_refer = 'schema_graph_class_label_id_refer'
+    key_schema_graph_class_prediction_refer = 'schema_graph_class_prediction_refer'
+    key_schema_graph_class_label_id_occur = 'schema_graph_class_label_id_occur'
+    key_schema_graph_class_prediction_occur = 'schema_graph_class_prediction_occur'
+    key_schema_graph_class_label_id_update = 'schema_graph_class_label_id_update'
+    key_schema_graph_class_prediction_update = 'schema_graph_class_prediction_update'
     key_class_label_id = 'class_label_id_%s'
     key_class_prediction = 'class_prediction_%s'
     key_start_pos = 'start_pos_%s'
@@ -305,7 +399,16 @@ if __name__ == "__main__":
         c_fp = {ct: 0 for ct in range(len(class_types))}
         c_fn = {ct: 0 for ct in range(len(class_types))}
         for slot in slots:
-            tot_cor, joint_val_cor, cls_cor, pos_cor, ref_cor, conf_mat, ctp, ctn, cfp, cfn = get_joint_slot_correctness(fp, class_types, label_maps,
+            tot_cor, joint_val_cor, cls_cor, pos_cor, ref_cor, conf_mat, ctp, ctn, cfp, cfn, \
+            schema_graph_precision_refer, schema_graph_recall_refer, schema_graph_f1_refer, schema_graph_acc_refer, \
+            schema_graph_precision_occur, schema_graph_recall_occur, schema_graph_f1_occur, schema_graph_acc_occur, \
+            schema_graph_precision_update, schema_graph_recall_update, schema_graph_f1_update, schema_graph_acc_update = get_joint_slot_correctness(fp, class_types, label_maps,
+                                                             key_schema_graph_class_label_id_refer=(key_schema_graph_class_label_id_refer),
+                                                             key_schema_graph_class_prediction_refer=(key_schema_graph_class_prediction_refer),
+                                                             key_schema_graph_class_label_id_occur=(key_schema_graph_class_label_id_occur),
+                                                             key_schema_graph_class_prediction_occur=(key_schema_graph_class_prediction_occur),
+                                                             key_schema_graph_class_label_id_update=(key_schema_graph_class_label_id_update),
+                                                             key_schema_graph_class_prediction_update=(key_schema_graph_class_prediction_update),
                                                              key_class_label_id=(key_class_label_id % slot),
                                                              key_class_prediction=(key_class_prediction % slot),
                                                              key_start_pos=(key_start_pos % slot),
@@ -364,6 +467,20 @@ if __name__ == "__main__":
 
         acc = np.mean(goal_correctness)
         acc_list.append((fp, acc))
+
+        print(fp)
+        print("refer schema graph precision: %g", (schema_graph_precision_refer))
+        print("refer schema graph recall: %g", (schema_graph_recall_refer))
+        print("refer schema graph f1: %g", (schema_graph_f1_refer))
+        print("refer schema graph acc: %g", (schema_graph_acc_refer))
+        print("occur schema graph precision: %g", (schema_graph_precision_occur))
+        print("occur schema graph recall: %g", (schema_graph_recall_occur))
+        print("occur schema graph f1: %g", (schema_graph_f1_occur))
+        print("occur schema graph acc: %g", (schema_graph_acc_occur))
+        print("update schema graph precision: %g", (schema_graph_precision_update))
+        print("update schema graph recall: %g", (schema_graph_recall_update))
+        print("update schema graph f1: %g", (schema_graph_f1_update))
+        print("update schema graph acc: %g", (schema_graph_acc_update))
 
     acc_list_s = sorted(acc_list, key=lambda tup: tup[1], reverse=True)
     # for (fp, acc) in acc_list_s:

@@ -330,7 +330,7 @@ def evaluate(args, model, tokenizer, processor, prefix=""):
                         diag_state[slot][i] = u
 
         results = eval_metric(model, inputs, outputs[0], outputs[1], outputs[2], outputs[3], outputs[4], outputs[5])
-        preds, ds = predict_and_format(model, tokenizer, inputs, outputs[2], outputs[3], outputs[4], outputs[5], unique_ids, input_ids_unmasked, values, inform, prefix, ds)
+        preds, ds = predict_and_format(model, tokenizer, inputs, outputs[2], outputs[3], outputs[4], outputs[5], unique_ids, input_ids_unmasked, values, inform, prefix, ds, outputs[6], outputs[7], outputs[8], outputs[9], outputs[10], outputs[11])
         all_results.append(results)
         all_preds.append(preds)
 
@@ -409,7 +409,7 @@ def eval_metric(model, features, total_loss, per_slot_per_example_loss, per_slot
     return metric_dict
 
 
-def predict_and_format(model, tokenizer, features, per_slot_class_logits, per_slot_start_logits, per_slot_end_logits, per_slot_refer_logits, ids, input_ids_unmasked, values, inform, prefix, ds):
+def predict_and_format(model, tokenizer, features, per_slot_class_logits, per_slot_start_logits, per_slot_end_logits, per_slot_refer_logits, ids, input_ids_unmasked, values, inform, prefix, ds, schema_graph_gt_refer, schema_graph_pd_refer, schema_graph_gt_occur, schema_graph_pd_occur, schema_graph_gt_update, schema_graph_pd_update):
     prediction_list = []
     dialog_state = ds
     for i in range(len(ids)):
@@ -418,6 +418,23 @@ def predict_and_format(model, tokenizer, features, per_slot_class_logits, per_sl
 
         prediction = {}
         prediction_addendum = {}
+
+        # schema graph
+        schema_graph_class_label_refer = schema_graph_gt_refer[i]
+        schema_graph_class_prediction_refer = schema_graph_pd_refer[i]
+        prediction['schema_graph_class_prediction_refer'] = schema_graph_class_prediction_refer.cpu().tolist()
+        prediction['schema_graph_class_label_id_refer'] = schema_graph_class_label_refer.cpu().tolist()
+
+        schema_graph_class_label_occur = schema_graph_gt_occur[i]
+        schema_graph_class_prediction_occur = schema_graph_pd_occur[i]
+        prediction['schema_graph_class_prediction_occur'] = schema_graph_class_prediction_occur.cpu().tolist()
+        prediction['schema_graph_class_label_id_occur'] = schema_graph_class_label_occur.cpu().tolist()
+
+        schema_graph_class_label_update = schema_graph_gt_update[i]
+        schema_graph_class_prediction_update = schema_graph_pd_update[i]
+        prediction['schema_graph_class_prediction_update'] = schema_graph_class_prediction_update.cpu().tolist()
+        prediction['schema_graph_class_label_id_update'] = schema_graph_class_label_update.cpu().tolist()
+        
         for slot in model.slot_list:
             class_logits = per_slot_class_logits[slot][i]
             start_logits = per_slot_start_logits[slot][i]
