@@ -21,7 +21,7 @@ import os
 import json
 
 import dataset_woz2
-# import dataset_sim
+import dataset_sim
 import dataset_multiwoz21
 
 
@@ -90,15 +90,15 @@ class Multiwoz21Processor(DataProcessor):
 class SimProcessor(DataProcessor):
     def get_train_examples(self, data_dir, args):
         return dataset_sim.create_examples(os.path.join(data_dir, 'train.json'),
-                                           'train', self.slot_list, **args)
+                                           'train', self.slot_list, self.domain_list, self.occur_list, **args)
 
     def get_dev_examples(self, data_dir, args):
         return dataset_sim.create_examples(os.path.join(data_dir, 'dev.json'),
-                                           'dev', self.slot_list, **args)
+                                           'dev', self.slot_list, self.domain_list, self.occur_list, **args)
 
     def get_test_examples(self, data_dir, args):
         return dataset_sim.create_examples(os.path.join(data_dir, 'test.json'),
-                                           'test', self.slot_list, **args)
+                                           'test', self.slot_list, self.domain_list, self.occur_list, **args)
 
 
 PROCESSORS = {"woz2": Woz2Processor,

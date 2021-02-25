@@ -16,5 +16,12 @@
     "price_range",
     "meal"
   ],
-  "label_maps": {}
+  "label_maps": {},
+  "occur_list": [
+    "num_people&restaurant_name",
+    "date&num_people",
+    "num_people&time",
+    "date&time",
+    "restaurant_name&time"
+  ]
 }

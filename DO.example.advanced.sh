@@ -10,15 +10,21 @@
 #DATA_DIR="data/woz2"
 
 #TASK="multiwoz21"
-TASK="woz2"
+#TASK="woz2"
+TASK="sim-m"
+#TASK="sim-r"
 #DATA_DIR="/home/yfeng/graph-DST/dataset/MULTIWOZ2.1"
-DATA_DIR="/home/yfeng/graph-DST/dataset/WOZ2"
+#DATA_DIR="/home/yfeng/graph-DST/dataset/WOZ2"
+DATA_DIR="/home/yfeng/graph-DST/dataset/SIM-M"
+#DATA_DIR="/home/yfeng/graph-DST/dataset/SIM-R"
 #DATA_DIR="/home/yfeng/graph-DST/GraphDST_multiple/GraphDST/data"
 
 # Project paths etc. ----------------------------------------------
 
 #OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/multiwoz2.1_multiple/
-OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/woz2_multiple/
+#OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/woz2_multiple/
+OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/sim_m_multiple/
+#OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/sim_r_multiple/
 #OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/test/
 
 # Main ------------------------------------------------------------
@@ -39,12 +45,12 @@ for step in train dev test; do
 	    --model_name_or_path="bert-base-uncased" \
 	    --do_lower_case \
 	    --learning_rate=1e-4 \
-	    --num_train_epochs=21 \
+	    --num_train_epochs=50 \
 	    --max_seq_length=180 \
 	    --per_gpu_train_batch_size=48 \
 	    --per_gpu_eval_batch_size=1 \
 	    --output_dir=${OUT_DIR} \
-	    --save_epochs=10 \
+	    --save_epochs=20 \
 	    --logging_steps=10 \
 	    --warmup_proportion=0.1 \
 	    --adam_epsilon=1e-6 \

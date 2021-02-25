@@ -12,5 +12,12 @@
     "num_tickets",
     "theatre_name"
   ],
-  "label_maps": {}
+  "label_maps": {},
+  "occur_list": [
+    "movie&num_tickets",
+    "num_tickets&theatre_name",
+    "date&theatre_name",
+    "date&movie",
+    "movie&theatre_name"
+  ]
 }
