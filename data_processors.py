@@ -32,9 +32,16 @@ class DataProcessor(object):
         self.class_types = raw_config['class_types']
         self.slot_list = raw_config['slots']
         self.domain_list = []
+        one_domain = False
         for slot in self.slot_list:
-            domain, _ = slot.split("-")
-            self.domain_list.append(domain)
+            token = slot.split("-")
+            if len(token) == 2:
+                domain, _ = slot.split("-")
+                self.domain_list.append(domain)
+            else:
+                one_domain = True
+        if one_domain:
+            self.domain_list.append("root")
         self.domain_list = list(set(self.domain_list))
         self.label_maps = raw_config['label_maps']
         self.occur_list = raw_config['occur_list']
