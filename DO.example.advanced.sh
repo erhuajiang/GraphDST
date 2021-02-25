@@ -19,7 +19,7 @@ OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/test/
 
 # Main ------------------------------------------------------------
 
-for step in dev test; do
+for step in train dev test; do
     args_add=""
     if [ "$step" = "train" ]; then
 	args_add="--do_train --predict_type=dummy"
