@@ -59,7 +59,7 @@ for step in dev test; do
 	    --mlm_pre \
 	    --mlm_during \
 	    ${args_add} \
-	    --no_cuda \
+#	    --no_cuda \
         2>&1 | tee ${OUT_DIR}/${step}.log
 
     if [ "$step" = "dev" ] || [ "$step" = "test" ]; then
