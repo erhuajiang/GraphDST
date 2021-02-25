@@ -282,7 +282,7 @@ def create_examples(input_file, set_type, slot_list, domain_list, occur_list,
             for slot_i, value_i in diag_seen_slots_value_dict.items():
                 for slot_j, value_j in diag_seen_slots_value_dict.items():
                     # update
-                    if i == 1:
+                    if i == 0:
                         continue
                     else:
                         if slot_i in pre_diag_seen_slots_value_dict:
