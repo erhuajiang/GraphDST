@@ -9,21 +9,21 @@
 #TASK="woz2"
 #DATA_DIR="data/woz2"
 
-#TASK="multiwoz21"
-TASK="woz2"
-#DATA_DIR="/home/yfeng/graph-DST/dataset/MULTIWOZ2.1"
-DATA_DIR="/home/yfeng/graph-DST/dataset/WOZ2"
+TASK="multiwoz21"
+#TASK="woz2"
+DATA_DIR="/home/yfeng/graph-DST/dataset/MULTIWOZ2.1"
+#DATA_DIR="/home/yfeng/graph-DST/dataset/WOZ2"
 #DATA_DIR="/home/yfeng/graph-DST/GraphDST_multiple/GraphDST/data"
 
 # Project paths etc. ----------------------------------------------
 
-#OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/multiwoz2.1_multiple/
-OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/woz2_multiple/
+OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/multiwoz2.1_multiple/
+#OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/woz2_multiple/
 #OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/test/
 
 # Main ------------------------------------------------------------
 
-for step in train dev test; do
+for step in dev test; do
     args_add=""
     if [ "$step" = "train" ]; then
 	args_add="--do_train --predict_type=dummy"
@@ -59,7 +59,7 @@ for step in train dev test; do
 	    --mlm_pre \
 	    --mlm_during \
 	    ${args_add} \
-#	    --no_cuda \
+	    --no_cuda \
         2>&1 | tee ${OUT_DIR}/${step}.log
 
     if [ "$step" = "dev" ] || [ "$step" = "test" ]; then
