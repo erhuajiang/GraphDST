@@ -208,5 +208,10 @@
       "vietnam",
       "thanh binh"
     ]
-  }
+  },
+  "occur_list": [
+    "area&food",
+    "food&price range",
+    "area&price range"
+  ]
 }
