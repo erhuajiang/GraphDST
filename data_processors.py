@@ -20,7 +20,7 @@
 import os
 import json
 
-# import dataset_woz2
+import dataset_woz2
 # import dataset_sim
 import dataset_multiwoz21
 
@@ -52,15 +52,15 @@ class DataProcessor(object):
 class Woz2Processor(DataProcessor):
     def get_train_examples(self, data_dir, args):
         return dataset_woz2.create_examples(os.path.join(data_dir, 'woz_train_en.json'),
-                                            'train', self.slot_list, self.label_maps, **args)
+                                            'train', self.slot_list, self.domain_list, self.occur_list, self.label_maps, **args)
 
     def get_dev_examples(self, data_dir, args):
         return dataset_woz2.create_examples(os.path.join(data_dir, 'woz_validate_en.json'),
-                                            'dev', self.slot_list, self.label_maps, **args)
+                                            'dev', self.slot_list, self.domain_list, self.occur_list, self.label_maps, **args)
 
     def get_test_examples(self, data_dir, args):
         return dataset_woz2.create_examples(os.path.join(data_dir, 'woz_test_en.json'),
-                                            'test', self.slot_list, self.label_maps, **args)
+                                            'test', self.slot_list, self.domain_list, self.occur_list, self.label_maps, **args)
 
 
 class Multiwoz21Processor(DataProcessor):
