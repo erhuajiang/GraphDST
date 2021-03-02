@@ -104,4 +104,5 @@ class SimProcessor(DataProcessor):
 PROCESSORS = {"woz2": Woz2Processor,
               "sim-m": SimProcessor,
               "sim-r": SimProcessor,
-              "multiwoz21": Multiwoz21Processor}
+              "multiwoz21": Multiwoz21Processor,
+              "multiwoz22": Multiwoz21Processor}

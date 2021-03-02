@@ -10,20 +10,24 @@
 #DATA_DIR="data/woz2"
 
 #TASK="multiwoz21"
+TASK="multiwoz22"
 #TASK="woz2"
-TASK="sim-m"
+#TASK="sim-m"
 #TASK="sim-r"
+
 #DATA_DIR="/home/yfeng/graph-DST/dataset/MULTIWOZ2.1"
+DATA_DIR="/home/yfeng/graph-DST/dataset/MULTIWOZ2.2"
 #DATA_DIR="/home/yfeng/graph-DST/dataset/WOZ2"
-DATA_DIR="/home/yfeng/graph-DST/dataset/SIM-M"
+#DATA_DIR="/home/yfeng/graph-DST/dataset/SIM-M"
 #DATA_DIR="/home/yfeng/graph-DST/dataset/SIM-R"
 #DATA_DIR="/home/yfeng/graph-DST/GraphDST_multiple/GraphDST/data"
 
 # Project paths etc. ----------------------------------------------
 
 #OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/multiwoz2.1_multiple/
+OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/multiwoz2.2_multiple/
 #OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/woz2_multiple/
-OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/sim_m_multiple/
+#OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/sim_m_multiple/
 #OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/sim_r_multiple/
 #OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/test/
 
