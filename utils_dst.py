@@ -49,7 +49,8 @@ class DSTExample(object):
                  class_label=None,
                  schema_graph_matrix_refer=None,
                  schema_graph_matrix_occur=None,
-                 schema_graph_matrix_update=None):
+                 schema_graph_matrix_update=None,
+                 node_description=None):
         self.guid = guid
         self.text_a = text_a
         self.text_b = text_b
@@ -66,6 +67,7 @@ class DSTExample(object):
         self.schema_graph_matrix_refer = schema_graph_matrix_refer
         self.schema_graph_matrix_occur = schema_graph_matrix_occur
         self.schema_graph_matrix_update = schema_graph_matrix_update
+        self.node_description = node_description
 
     def __str__(self):
         return self.__repr__()
@@ -123,6 +125,9 @@ class InputFeatures(object):
                  schema_graph_matrix_refer=None,
                  schema_graph_matrix_occur=None,
                  schema_graph_matrix_update=None,
+                 input_ids_nodes=None,
+                 input_mask_nodes=None,
+                 segment_ids_nodes=None,
                  guid="NONE"):
         self.guid = guid
         self.input_ids = input_ids
@@ -140,6 +145,9 @@ class InputFeatures(object):
         self.schema_graph_matrix_refer = schema_graph_matrix_refer
         self.schema_graph_matrix_occur = schema_graph_matrix_occur
         self.schema_graph_matrix_update = schema_graph_matrix_update
+        self.input_ids_nodes = input_ids_nodes
+        self.input_mask_nodes = input_mask_nodes
+        self.segment_ids_nodes = segment_ids_nodes
 
 
 def convert_examples_to_features(examples, slot_list, domain_list, class_types, model_type, tokenizer, max_seq_length, slot_value_dropout=0.0):
@@ -183,6 +191,35 @@ def convert_examples_to_features(examples, slot_list, domain_list, class_types, 
         assert len(tokens) == len(token_labels)
         assert len(tokens_unmasked) == len(token_labels)
         return tokens, tokens_unmasked, token_labels
+
+    def _tokenize_text(text, tokenizer, model_specs, slot_value_dropout):
+        # joint_text_label = [0 for _ in text_label_dict[slot]] # joint all slots' label
+        # for slot_text_label in text_label_dict.values():
+        #     for idx, label in enumerate(slot_text_label):
+        #         if label == 1:
+        #             joint_text_label[idx] = 1
+
+        # text_label = text_label_dict[slot]
+        tokens = []
+        tokens_unmasked = []
+        # token_labels = []
+        for token in text:
+            token = convert_to_unicode(token)
+            sub_tokens = tokenizer.tokenize(token) # Most time intensive step
+            tokens_unmasked.extend(sub_tokens)
+            if slot_value_dropout == 0.0:
+                tokens.extend(sub_tokens)
+            else:
+                rn_list = np.random.random_sample((len(sub_tokens),))
+                for rn, sub_token in zip(rn_list, sub_tokens):
+                    if rn > slot_value_dropout:
+                        tokens.append(sub_token)
+                    else:
+                        tokens.append(model_specs['UNK_TOKEN'])
+            # token_labels.extend([token_label for _ in sub_tokens])
+        # assert len(tokens) == len(token_labels)
+        # assert len(tokens_unmasked) == len(token_labels)
+        return tokens, tokens_unmasked
 
     def _truncate_seq_pair(tokens_a, tokens_b, history, max_length):
         """Truncates a sequence pair in place to the maximum length.
@@ -408,6 +445,22 @@ def convert_examples_to_features(examples, slot_list, domain_list, class_types, 
             input_ids_unmasked = input_ids
 
         assert(len(input_ids) == len(input_ids_unmasked))
+        
+        # schema graph node description
+        input_ids_nodes = []
+        input_mask_nodes = []
+        segment_ids_nodes = []
+        for node in example.node_description:
+            tokens_node, tokens_node_unmasked = _tokenize_text(node, tokenizer, model_specs, slot_value_dropout)
+            _, input_ids_node, input_mask_node, segment_ids_node = _get_transformer_input(tokens_node,
+                                                                                [],
+                                                                                [],
+                                                                                max_seq_length,
+                                                                                tokenizer,
+                                                                                model_specs)
+            input_ids_nodes.append(input_ids_node)
+            input_mask_nodes.append(input_mask_node)
+            segment_ids_nodes.append(segment_ids_node)
 
         if example_index < 10:
             logger.info("*** Example ***")
@@ -445,7 +498,11 @@ def convert_examples_to_features(examples, slot_list, domain_list, class_types, 
                 class_label_id=class_label_id_dict,
                 schema_graph_matrix_refer=example.schema_graph_matrix_refer,
                 schema_graph_matrix_occur=example.schema_graph_matrix_occur,
-                schema_graph_matrix_update=example.schema_graph_matrix_update))
+                schema_graph_matrix_update=example.schema_graph_matrix_update,
+                input_ids_nodes=input_ids_nodes,
+                input_mask_nodes=input_mask_nodes,
+                segment_ids_nodes=segment_ids_nodes,
+            ))
 
     
 

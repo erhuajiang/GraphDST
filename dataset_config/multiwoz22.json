@@ -1340,5 +1340,6 @@
     "attraction-area&attraction-name",
     "attraction-area&attraction-type",
     "attraction-name&attraction-type"
-  ]
+  ],
+  "description": {}
 }

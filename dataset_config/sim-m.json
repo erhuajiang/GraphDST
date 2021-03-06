@@ -19,5 +19,6 @@
     "date&theatre_name",
     "date&movie",
     "movie&theatre_name"
-  ]
+  ],
+  "description": {}
 }

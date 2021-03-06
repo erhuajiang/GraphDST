@@ -10,13 +10,15 @@
 #DATA_DIR="data/woz2"
 
 #TASK="multiwoz21"
-TASK="multiwoz22"
+#TASK="multiwoz22"
+TASK="sgd"
 #TASK="woz2"
 #TASK="sim-m"
 #TASK="sim-r"
 
 #DATA_DIR="/home/yfeng/graph-DST/dataset/MULTIWOZ2.1"
-DATA_DIR="/home/yfeng/graph-DST/dataset/MULTIWOZ2.2"
+#DATA_DIR="/home/yfeng/graph-DST/dataset/MULTIWOZ2.2"
+DATA_DIR="/home/yfeng/graph-DST/dataset/SGD"
 #DATA_DIR="/home/yfeng/graph-DST/dataset/WOZ2"
 #DATA_DIR="/home/yfeng/graph-DST/dataset/SIM-M"
 #DATA_DIR="/home/yfeng/graph-DST/dataset/SIM-R"
@@ -25,7 +27,8 @@ DATA_DIR="/home/yfeng/graph-DST/dataset/MULTIWOZ2.2"
 # Project paths etc. ----------------------------------------------
 
 #OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/multiwoz2.1_multiple/
-OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/multiwoz2.2_multiple/
+#OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/multiwoz2.2_multiple/
+OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/sgd_multiple/
 #OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/woz2_multiple/
 #OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/sim_m_multiple/
 #OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/sim_r_multiple/
@@ -33,7 +36,7 @@ OUT_DIR=/home/yfeng/graph-DST/GraphDST_output/multiwoz2.2_multiple/
 
 # Main ------------------------------------------------------------
 
-for step in dev test; do
+for step in train dev test; do
     args_add=""
     if [ "$step" = "train" ]; then
 	args_add="--do_train --predict_type=dummy"
@@ -41,7 +44,7 @@ for step in dev test; do
 	args_add="--do_eval --predict_type=${step}"
     fi
 
-    CUDA_VISIBLE_DEVICES=1 python3 run_dst.py \
+    CUDA_VISIBLE_DEVICES=2 python3 run_dst.py \
 	    --task_name=${TASK} \
 	    --data_dir=${DATA_DIR} \
 	    --dataset_config=dataset_config/${TASK}.json \

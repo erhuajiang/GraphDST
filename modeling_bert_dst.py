@@ -96,7 +96,11 @@ class BertForDST(BertPreTrainedModel):
                 schema_graph_matrix_refer=None,
                 schema_graph_matrix_occur=None,
                 schema_graph_matrix_update=None,
-                slot_id=None):
+                slot_id=None,
+                input_ids_ndoes=None,
+                input_mask_nodes=None,
+                segment_ids_nodes=None
+                ):
         outputs = self.bert(
             input_ids,
             attention_mask=input_mask,

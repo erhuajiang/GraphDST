@@ -23,6 +23,7 @@ import json
 import dataset_woz2
 import dataset_sim
 import dataset_multiwoz21
+import dataset_sgd
 
 
 class DataProcessor(object):
@@ -45,6 +46,7 @@ class DataProcessor(object):
         self.domain_list = list(set(self.domain_list))
         self.label_maps = raw_config['label_maps']
         self.occur_list = raw_config['occur_list']
+        self.slot_description = raw_config['description']
 
     def get_train_examples(self, data_dir, **args):
         raise NotImplementedError()
@@ -87,6 +89,23 @@ class Multiwoz21Processor(DataProcessor):
                                                   'test', self.slot_list, self.domain_list, self.occur_list, self.label_maps, **args)
 
 
+class SgdProcessor(DataProcessor):
+    def get_train_examples(self, data_dir, args):
+        return dataset_sgd.create_examples(os.path.join(data_dir, 'train_dials.json'),
+                                                  os.path.join(data_dir, 'dialogue_acts.json'),
+                                                  'train', self.slot_list, self.domain_list, self.occur_list, self.slot_description, self.label_maps, **args)
+
+    def get_dev_examples(self, data_dir, args):
+        return dataset_sgd.create_examples(os.path.join(data_dir, 'val_dials.json'),
+                                                  os.path.join(data_dir, 'dialogue_acts.json'),
+                                                  'dev', self.slot_list, self.domain_list, self.occur_list, self.slot_description, self.label_maps, **args)
+
+    def get_test_examples(self, data_dir, args):
+        return dataset_sgd.create_examples(os.path.join(data_dir, 'test_dials.json'),
+                                                  os.path.join(data_dir, 'dialogue_acts.json'),
+                                                  'test', self.slot_list, self.domain_list, self.occur_list, self.slot_description, self.label_maps, **args)
+
+
 class SimProcessor(DataProcessor):
     def get_train_examples(self, data_dir, args):
         return dataset_sim.create_examples(os.path.join(data_dir, 'train.json'),
@@ -105,4 +124,5 @@ PROCESSORS = {"woz2": Woz2Processor,
               "sim-m": SimProcessor,
               "sim-r": SimProcessor,
               "multiwoz21": Multiwoz21Processor,
-              "multiwoz22": Multiwoz21Processor}
+              "multiwoz22": Multiwoz21Processor,
+              "sgd": SgdProcessor}

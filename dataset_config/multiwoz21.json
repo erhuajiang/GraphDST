@@ -1335,5 +1335,6 @@
     "restaurant-area&restaurant-food",
     "restaurant-name&restaurant-pricerange",
     "restaurant-area&restaurant-name"
-  ]
+  ],
+  "description": {}
 }

@@ -207,7 +207,11 @@ def train(args, train_dataset, features, model, tokenizer, processor, continue_f
                       'schema_graph_matrix_refer': batch[11],
                       'schema_graph_matrix_occur': batch[12],
                       'schema_graph_matrix_update': batch[13],
-                      'slot_id': batch[14]}
+                      'slot_id': batch[14],
+                      'input_ids_ndoes': batch[15],
+                      'input_mask_nodes': batch[16],
+                      'segment_ids_nodes': batch[17]
+                      }
             outputs = model(**inputs)
             loss = outputs[0]  # model outputs are always tuple in pytorch-transformers (see doc)
 
@@ -315,7 +319,11 @@ def evaluate(args, model, tokenizer, processor, prefix=""):
                       'schema_graph_matrix_refer': batch[11],
                       'schema_graph_matrix_occur': batch[12],
                       'schema_graph_matrix_update': batch[13],
-                      'slot_id': batch[14]}
+                      'slot_id': batch[14],
+                      'input_ids_ndoes': batch[15],
+                      'input_mask_nodes': batch[16],
+                      'segment_ids_nodes': batch[17]
+                      }
             unique_ids = [features[i.item()].guid for i in batch[9]]
             values = [features[i.item()].values for i in batch[9]]
             input_ids_unmasked = [features[i.item()].input_ids_unmasked for i in batch[9]]
@@ -562,6 +570,9 @@ def load_and_cache_examples(args, model, tokenizer, processor, evaluate=False):
     all_input_ids = torch.tensor([f.input_ids for f in features], dtype=torch.long)
     all_input_mask = torch.tensor([f.input_mask for f in features], dtype=torch.long)
     all_segment_ids = torch.tensor([f.segment_ids for f in features], dtype=torch.long)
+    all_input_ids_nodes = torch.tensor([f.input_ids_nodes for f in features], dtype=torch.long)
+    all_input_mask_nodes = torch.tensor([f.input_mask_nodes for f in features], dtype=torch.long)
+    all_segment_ids_nodes = torch.tensor([f.segment_ids_nodes for f in features], dtype=torch.long)
     all_example_index = torch.arange(all_input_ids.size(0), dtype=torch.long)
     f_start_pos = [f.start_pos for f in features]
     f_end_pos = [f.end_pos for f in features]
@@ -601,7 +612,11 @@ def load_and_cache_examples(args, model, tokenizer, processor, evaluate=False):
                                 all_schema_graph_matrix_refer,
                                 all_schema_graph_matrix_occur,
                                 all_schema_graph_matrix_update,
-                                all_slot_id)
+                                all_slot_id,
+                                all_input_ids_nodes,
+                                all_input_mask_nodes,
+                                all_segment_ids_nodes,
+                                )
 
     return dataset, features
 

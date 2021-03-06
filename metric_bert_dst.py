@@ -378,7 +378,7 @@ if __name__ == "__main__":
     dataset = sys.argv[1].lower()
     dataset_config = sys.argv[2].lower()
 
-    if dataset not in ['woz2', 'sim-m', 'sim-r', 'multiwoz21', 'multiwoz22']:
+    if dataset not in ['woz2', 'sim-m', 'sim-r', 'multiwoz21', 'multiwoz22', 'sgd']:
         raise ValueError("Task not found: %s" % (dataset))
 
     class_types, slots, label_maps = load_dataset_config(dataset_config)

@@ -23,5 +23,6 @@
     "num_people&time",
     "date&time",
     "restaurant_name&time"
-  ]
+  ],
+  "description": {}
 }
