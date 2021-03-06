@@ -1,0 +1,2192 @@
+{
+  "class_types": [
+    "none",
+    "dontcare",
+    "copy_value",
+    "true",
+    "false",
+    "inform",
+    "refer"
+  ],
+  "slots": [
+    "Banks_1-account_type",
+    "Banks_1-recipient_account_type",
+    "Banks_1-balance",
+    "Banks_1-amount",
+    "Banks_1-recipient_account_name",
+    "Buses_1-from_location",
+    "Buses_1-to_location",
+    "Buses_1-from_station",
+    "Buses_1-to_station",
+    "Buses_1-leaving_date",
+    "Buses_1-leaving_time",
+    "Buses_1-fare",
+    "Buses_1-travelers",
+    "Buses_1-transfers",
+    "Buses_2-origin",
+    "Buses_2-destination",
+    "Buses_2-origin_station_name",
+    "Buses_2-destination_station_name",
+    "Buses_2-departure_date",
+    "Buses_2-price",
+    "Buses_2-departure_time",
+    "Buses_2-group_size",
+    "Buses_2-fare_type",
+    "Calendar_1-event_date",
+    "Calendar_1-event_time",
+    "Calendar_1-event_location",
+    "Calendar_1-event_name",
+    "Calendar_1-available_start_time",
+    "Calendar_1-available_end_time",
+    "Events_1-category",
+    "Events_1-subcategory",
+    "Events_1-event_name",
+    "Events_1-date",
+    "Events_1-time",
+    "Events_1-number_of_seats",
+    "Events_1-city_of_event",
+    "Events_1-event_location",
+    "Events_1-address_of_location",
+    "Events_2-event_type",
+    "Events_2-category",
+    "Events_2-event_name",
+    "Events_2-date",
+    "Events_2-time",
+    "Events_2-number_of_tickets",
+    "Events_2-city",
+    "Events_2-venue",
+    "Events_2-venue_address",
+    "Flights_1-passengers",
+    "Flights_1-seating_class",
+    "Flights_1-origin_city",
+    "Flights_1-destination_city",
+    "Flights_1-origin_airport",
+    "Flights_1-destination_airport",
+    "Flights_1-departure_date",
+    "Flights_1-return_date",
+    "Flights_1-number_stops",
+    "Flights_1-outbound_departure_time",
+    "Flights_1-outbound_arrival_time",
+    "Flights_1-inbound_arrival_time",
+    "Flights_1-inbound_departure_time",
+    "Flights_1-price",
+    "Flights_1-refundable",
+    "Flights_1-airlines",
+    "Flights_2-passengers",
+    "Flights_2-seating_class",
+    "Flights_2-origin",
+    "Flights_2-destination",
+    "Flights_2-origin_airport",
+    "Flights_2-destination_airport",
+    "Flights_2-departure_date",
+    "Flights_2-return_date",
+    "Flights_2-number_stops",
+    "Flights_2-outbound_departure_time",
+    "Flights_2-outbound_arrival_time",
+    "Flights_2-inbound_arrival_time",
+    "Flights_2-inbound_departure_time",
+    "Flights_2-fare",
+    "Flights_2-is_redeye",
+    "Flights_2-airlines",
+    "Homes_1-area",
+    "Homes_1-address",
+    "Homes_1-property_name",
+    "Homes_1-phone_number",
+    "Homes_1-furnished",
+    "Homes_1-pets_allowed",
+    "Homes_1-rent",
+    "Homes_1-visit_date",
+    "Homes_1-number_of_beds",
+    "Homes_1-number_of_baths",
+    "Hotels_1-destination",
+    "Hotels_1-number_of_rooms",
+    "Hotels_1-check_in_date",
+    "Hotels_1-number_of_days",
+    "Hotels_1-star_rating",
+    "Hotels_1-hotel_name",
+    "Hotels_1-street_address",
+    "Hotels_1-phone_number",
+    "Hotels_1-price_per_night",
+    "Hotels_1-has_wifi",
+    "Hotels_2-where_to",
+    "Hotels_2-number_of_adults",
+    "Hotels_2-check_in_date",
+    "Hotels_2-check_out_date",
+    "Hotels_2-rating",
+    "Hotels_2-address",
+    "Hotels_2-phone_number",
+    "Hotels_2-total_price",
+    "Hotels_2-has_laundry_service",
+    "Hotels_3-location",
+    "Hotels_3-number_of_rooms",
+    "Hotels_3-check_in_date",
+    "Hotels_3-check_out_date",
+    "Hotels_3-average_rating",
+    "Hotels_3-hotel_name",
+    "Hotels_3-street_address",
+    "Hotels_3-phone_number",
+    "Hotels_3-price",
+    "Hotels_3-pets_welcome",
+    "Media_1-title",
+    "Media_1-genre",
+    "Media_1-subtitles",
+    "Media_1-directed_by",
+    "Movies_1-price",
+    "Movies_1-number_of_tickets",
+    "Movies_1-show_type",
+    "Movies_1-theater_name",
+    "Movies_1-show_time",
+    "Movies_1-show_date",
+    "Movies_1-genre",
+    "Movies_1-street_address",
+    "Movies_1-location",
+    "Movies_1-movie_name",
+    "Music_1-song_name",
+    "Music_1-artist",
+    "Music_1-album",
+    "Music_1-genre",
+    "Music_1-year",
+    "Music_1-playback_device",
+    "Music_2-song_name",
+    "Music_2-artist",
+    "Music_2-album",
+    "Music_2-genre",
+    "Music_2-playback_device",
+    "RentalCars_1-type",
+    "RentalCars_1-car_name",
+    "RentalCars_1-pickup_location",
+    "RentalCars_1-pickup_date",
+    "RentalCars_1-pickup_time",
+    "RentalCars_1-pickup_city",
+    "RentalCars_1-dropoff_date",
+    "RentalCars_1-total_price",
+    "RentalCars_2-car_type",
+    "RentalCars_2-car_name",
+    "RentalCars_2-pickup_location",
+    "RentalCars_2-pickup_date",
+    "RentalCars_2-pickup_time",
+    "RentalCars_2-pickup_city",
+    "RentalCars_2-dropoff_date",
+    "RentalCars_2-total_price",
+    "Restaurants_1-restaurant_name",
+    "Restaurants_1-date",
+    "Restaurants_1-time",
+    "Restaurants_1-serves_alcohol",
+    "Restaurants_1-has_live_music",
+    "Restaurants_1-phone_number",
+    "Restaurants_1-street_address",
+    "Restaurants_1-party_size",
+    "Restaurants_1-price_range",
+    "Restaurants_1-city",
+    "Restaurants_1-cuisine",
+    "RideSharing_1-destination",
+    "RideSharing_1-shared_ride",
+    "RideSharing_1-ride_fare",
+    "RideSharing_1-approximate_ride_duration",
+    "RideSharing_1-number_of_riders",
+    "RideSharing_2-destination",
+    "RideSharing_2-ride_type",
+    "RideSharing_2-ride_fare",
+    "RideSharing_2-wait_time",
+    "RideSharing_2-number_of_seats",
+    "Services_1-stylist_name",
+    "Services_1-phone_number",
+    "Services_1-average_rating",
+    "Services_1-is_unisex",
+    "Services_1-street_address",
+    "Services_1-city",
+    "Services_1-appointment_date",
+    "Services_1-appointment_time",
+    "Services_2-dentist_name",
+    "Services_2-phone_number",
+    "Services_2-address",
+    "Services_2-city",
+    "Services_2-appointment_date",
+    "Services_2-appointment_time",
+    "Services_2-offers_cosmetic_services",
+    "Services_3-doctor_name",
+    "Services_3-phone_number",
+    "Services_3-average_rating",
+    "Services_3-street_address",
+    "Services_3-city",
+    "Services_3-appointment_date",
+    "Services_3-appointment_time",
+    "Services_3-type",
+    "Travel_1-location",
+    "Travel_1-attraction_name",
+    "Travel_1-category",
+    "Travel_1-phone_number",
+    "Travel_1-free_entry",
+    "Travel_1-good_for_kids",
+    "Weather_1-precipitation",
+    "Weather_1-humidity",
+    "Weather_1-wind",
+    "Weather_1-temperature",
+    "Weather_1-city",
+    "Weather_1-date",
+    "Alarm_1-alarm_time",
+    "Alarm_1-alarm_name",
+    "Alarm_1-new_alarm_time",
+    "Alarm_1-new_alarm_name",
+    "Buses_3-from_city",
+    "Buses_3-to_city",
+    "Buses_3-from_station",
+    "Buses_3-to_station",
+    "Buses_3-departure_date",
+    "Buses_3-departure_time",
+    "Buses_3-price",
+    "Buses_3-additional_luggage",
+    "Buses_3-num_passengers",
+    "Buses_3-category",
+    "Events_3-event_type",
+    "Events_3-event_name",
+    "Events_3-date",
+    "Events_3-time",
+    "Events_3-number_of_tickets",
+    "Events_3-price_per_ticket",
+    "Events_3-city",
+    "Events_3-venue",
+    "Events_3-venue_address",
+    "Flights_4-number_of_tickets",
+    "Flights_4-seating_class",
+    "Flights_4-origin_airport",
+    "Flights_4-destination_airport",
+    "Flights_4-departure_date",
+    "Flights_4-return_date",
+    "Flights_4-is_nonstop",
+    "Flights_4-outbound_departure_time",
+    "Flights_4-outbound_arrival_time",
+    "Flights_4-inbound_arrival_time",
+    "Flights_4-inbound_departure_time",
+    "Flights_4-price",
+    "Flights_4-airlines",
+    "Homes_2-intent",
+    "Homes_2-area",
+    "Homes_2-address",
+    "Homes_2-property_name",
+    "Homes_2-phone_number",
+    "Homes_2-has_garage",
+    "Homes_2-in_unit_laundry",
+    "Homes_2-price",
+    "Homes_2-visit_date",
+    "Homes_2-number_of_beds",
+    "Homes_2-number_of_baths",
+    "Hotels_2-where_to",
+    "Hotels_2-number_of_adults",
+    "Hotels_2-check_in_date",
+    "Hotels_2-check_out_date",
+    "Hotels_2-rating",
+    "Hotels_2-address",
+    "Hotels_2-phone_number",
+    "Hotels_2-total_price",
+    "Hotels_2-has_laundry_service",
+    "Hotels_4-location",
+    "Hotels_4-number_of_rooms",
+    "Hotels_4-check_in_date",
+    "Hotels_4-stay_length",
+    "Hotels_4-star_rating",
+    "Hotels_4-place_name",
+    "Hotels_4-street_address",
+    "Hotels_4-phone_number",
+    "Hotels_4-price_per_night",
+    "Hotels_4-smoking_allowed",
+    "Media_3-title",
+    "Media_3-genre",
+    "Media_3-subtitle_language",
+    "Media_3-starring",
+    "Messaging_1-location",
+    "Messaging_1-contact_name",
+    "Movies_1-price",
+    "Movies_1-number_of_tickets",
+    "Movies_1-show_type",
+    "Movies_1-theater_name",
+    "Movies_1-show_time",
+    "Movies_1-show_date",
+    "Movies_1-genre",
+    "Movies_1-street_address",
+    "Movies_1-location",
+    "Movies_1-movie_name",
+    "Movies_3-movie_title",
+    "Movies_3-genre",
+    "Movies_3-percent_rating",
+    "Movies_3-cast",
+    "Movies_3-directed_by",
+    "Music_3-track",
+    "Music_3-artist",
+    "Music_3-album",
+    "Music_3-genre",
+    "Music_3-year",
+    "Music_3-device",
+    "Payment_1-payment_method",
+    "Payment_1-amount",
+    "Payment_1-receiver",
+    "Payment_1-private_visibility",
+    "RentalCars_3-car_type",
+    "RentalCars_3-car_name",
+    "RentalCars_3-pickup_location",
+    "RentalCars_3-start_date",
+    "RentalCars_3-pickup_time",
+    "RentalCars_3-city",
+    "RentalCars_3-end_date",
+    "RentalCars_3-price_per_day",
+    "RentalCars_3-add_insurance",
+    "Restaurants_2-restaurant_name",
+    "Restaurants_2-date",
+    "Restaurants_2-time",
+    "Restaurants_2-has_seating_outdoors",
+    "Restaurants_2-has_vegetarian_options",
+    "Restaurants_2-phone_number",
+    "Restaurants_2-rating",
+    "Restaurants_2-address",
+    "Restaurants_2-number_of_seats",
+    "Restaurants_2-price_range",
+    "Restaurants_2-location",
+    "Restaurants_2-category",
+    "RideSharing_2-destination",
+    "RideSharing_2-ride_type",
+    "RideSharing_2-ride_fare",
+    "RideSharing_2-wait_time",
+    "RideSharing_2-number_of_seats",
+    "Services_1-stylist_name",
+    "Services_1-phone_number",
+    "Services_1-average_rating",
+    "Services_1-is_unisex",
+    "Services_1-street_address",
+    "Services_1-city",
+    "Services_1-appointment_date",
+    "Services_1-appointment_time",
+    "Services_4-therapist_name",
+    "Services_4-phone_number",
+    "Services_4-address",
+    "Services_4-city",
+    "Services_4-appointment_date",
+    "Services_4-appointment_time",
+    "Services_4-type",
+    "Trains_1-from",
+    "Trains_1-to",
+    "Trains_1-from_station",
+    "Trains_1-to_station",
+    "Trains_1-date_of_journey",
+    "Trains_1-journey_start_time",
+    "Trains_1-total",
+    "Trains_1-number_of_adults",
+    "Trains_1-class",
+    "Trains_1-trip_protection",
+    "Travel_1-location",
+    "Travel_1-attraction_name",
+    "Travel_1-category",
+    "Travel_1-phone_number",
+    "Travel_1-free_entry",
+    "Travel_1-good_for_kids",
+    "Weather_1-precipitation",
+    "Weather_1-humidity",
+    "Weather_1-wind",
+    "Weather_1-temperature",
+    "Weather_1-city",
+    "Weather_1-date",
+    "Alarm_1-alarm_time",
+    "Alarm_1-alarm_name",
+    "Alarm_1-new_alarm_time",
+    "Alarm_1-new_alarm_name",
+    "Banks_2-account_type",
+    "Banks_2-recipient_account_type",
+    "Banks_2-account_balance",
+    "Banks_2-transfer_amount",
+    "Banks_2-recipient_name",
+    "Banks_2-transfer_time",
+    "Buses_1-from_location",
+    "Buses_1-to_location",
+    "Buses_1-from_station",
+    "Buses_1-to_station",
+    "Buses_1-leaving_date",
+    "Buses_1-leaving_time",
+    "Buses_1-fare",
+    "Buses_1-travelers",
+    "Buses_1-transfers",
+    "Events_1-category",
+    "Events_1-subcategory",
+    "Events_1-event_name",
+    "Events_1-date",
+    "Events_1-time",
+    "Events_1-number_of_seats",
+    "Events_1-city_of_event",
+    "Events_1-event_location",
+    "Events_1-address_of_location",
+    "Flights_3-passengers",
+    "Flights_3-flight_class",
+    "Flights_3-origin_city",
+    "Flights_3-destination_city",
+    "Flights_3-origin_airport_name",
+    "Flights_3-destination_airport_name",
+    "Flights_3-departure_date",
+    "Flights_3-return_date",
+    "Flights_3-number_stops",
+    "Flights_3-outbound_departure_time",
+    "Flights_3-outbound_arrival_time",
+    "Flights_3-inbound_arrival_time",
+    "Flights_3-inbound_departure_time",
+    "Flights_3-price",
+    "Flights_3-number_checked_bags",
+    "Flights_3-airlines",
+    "Flights_3-arrives_next_day",
+    "Homes_1-area",
+    "Homes_1-address",
+    "Homes_1-property_name",
+    "Homes_1-phone_number",
+    "Homes_1-furnished",
+    "Homes_1-pets_allowed",
+    "Homes_1-rent",
+    "Homes_1-visit_date",
+    "Homes_1-number_of_beds",
+    "Homes_1-number_of_baths",
+    "Hotels_1-destination",
+    "Hotels_1-number_of_rooms",
+    "Hotels_1-check_in_date",
+    "Hotels_1-number_of_days",
+    "Hotels_1-star_rating",
+    "Hotels_1-hotel_name",
+    "Hotels_1-street_address",
+    "Hotels_1-phone_number",
+    "Hotels_1-price_per_night",
+    "Hotels_1-has_wifi",
+    "Hotels_4-location",
+    "Hotels_4-number_of_rooms",
+    "Hotels_4-check_in_date",
+    "Hotels_4-stay_length",
+    "Hotels_4-star_rating",
+    "Hotels_4-place_name",
+    "Hotels_4-street_address",
+    "Hotels_4-phone_number",
+    "Hotels_4-price_per_night",
+    "Hotels_4-smoking_allowed",
+    "Media_2-movie_name",
+    "Media_2-genre",
+    "Media_2-subtitle_language",
+    "Media_2-director",
+    "Media_2-actors",
+    "Media_2-price",
+    "Movies_2-title",
+    "Movies_2-genre",
+    "Movies_2-aggregate_rating",
+    "Movies_2-starring",
+    "Movies_2-director",
+    "Music_1-song_name",
+    "Music_1-artist",
+    "Music_1-album",
+    "Music_1-genre",
+    "Music_1-year",
+    "Music_1-playback_device",
+    "RentalCars_1-type",
+    "RentalCars_1-car_name",
+    "RentalCars_1-pickup_location",
+    "RentalCars_1-pickup_date",
+    "RentalCars_1-pickup_time",
+    "RentalCars_1-pickup_city",
+    "RentalCars_1-dropoff_date",
+    "RentalCars_1-total_price",
+    "Restaurants_2-restaurant_name",
+    "Restaurants_2-date",
+    "Restaurants_2-time",
+    "Restaurants_2-has_seating_outdoors",
+    "Restaurants_2-has_vegetarian_options",
+    "Restaurants_2-phone_number",
+    "Restaurants_2-rating",
+    "Restaurants_2-address",
+    "Restaurants_2-number_of_seats",
+    "Restaurants_2-price_range",
+    "Restaurants_2-location",
+    "Restaurants_2-category",
+    "RideSharing_1-destination",
+    "RideSharing_1-shared_ride",
+    "RideSharing_1-ride_fare",
+    "RideSharing_1-approximate_ride_duration",
+    "RideSharing_1-number_of_riders",
+    "Services_4-therapist_name",
+    "Services_4-phone_number",
+    "Services_4-address",
+    "Services_4-city",
+    "Services_4-appointment_date",
+    "Services_4-appointment_time",
+    "Services_4-type",
+    "Travel_1-location",
+    "Travel_1-attraction_name",
+    "Travel_1-category",
+    "Travel_1-phone_number",
+    "Travel_1-free_entry",
+    "Travel_1-good_for_kids",
+    "Weather_1-precipitation",
+    "Weather_1-humidity",
+    "Weather_1-wind",
+    "Weather_1-temperature",
+    "Weather_1-city",
+    "Weather_1-date"
+  ],
+  "label_maps": {
+    "guest house": [
+      "guest houses"
+    ],
+    "hotel": [
+      "hotels"
+    ],
+    "centre": [
+      "center",
+      "downtown"
+    ],
+    "north": [
+      "northern",
+      "northside",
+      "northend"
+    ],
+    "east": [
+      "eastern",
+      "eastside",
+      "eastend"
+    ],
+    "west": [
+      "western",
+      "westside",
+      "westend"
+    ],
+    "south": [
+      "southern",
+      "southside",
+      "southend"
+    ],
+    "cheap": [
+      "inexpensive",
+      "lower price",
+      "lower range",
+      "cheaply",
+      "cheaper",
+      "cheapest",
+      "very affordable"
+    ],
+    "moderate": [
+      "moderately",
+      "reasonable",
+      "reasonably",
+      "affordable",
+      "mid range",
+      "mid-range",
+      "priced moderately",
+      "decently priced",
+      "mid price",
+      "mid-price",
+      "mid priced",
+      "mid-priced",
+      "middle price",
+      "medium price",
+      "medium priced",
+      "not too expensive",
+      "not too cheap"
+    ],
+    "expensive": [
+      "high end",
+      "high-end",
+      "high class",
+      "high-class",
+      "high scale",
+      "high-scale",
+      "high price",
+      "high priced",
+      "higher price",
+      "fancy",
+      "upscale",
+      "nice",
+      "expensively",
+      "luxury"
+    ],
+    "0": [
+      "zero"
+    ],
+    "1": [
+      "one",
+      "just me",
+      "for me",
+      "myself",
+      "alone",
+      "me"
+    ],
+    "2": [
+      "two"
+    ],
+    "3": [
+      "three"
+    ],
+    "4": [
+      "four"
+    ],
+    "5": [
+      "five"
+    ],
+    "6": [
+      "six"
+    ],
+    "7": [
+      "seven"
+    ],
+    "8": [
+      "eight"
+    ],
+    "9": [
+      "nine"
+    ],
+    "10": [
+      "ten"
+    ],
+    "11": [
+      "eleven"
+    ],
+    "12": [
+      "twelve"
+    ],
+    "architecture": [
+      "architectural",
+      "architecturally",
+      "architect"
+    ],
+    "boat": [
+      "boating",
+      "boats",
+      "camboats"
+    ],
+    "boating": [
+      "boat",
+      "boats",
+      "camboats"
+    ],
+    "camboats": [
+      "boating",
+      "boat",
+      "boats"
+    ],
+    "cinema": [
+      "cinemas",
+      "movie",
+      "films",
+      "film"
+    ],
+    "college": [
+      "colleges"
+    ],
+    "concert": [
+      "concert hall",
+      "concert halls",
+      "concerthall",
+      "concerthalls",
+      "concerts"
+    ],
+    "concerthall": [
+      "concert hall",
+      "concert halls",
+      "concerthalls",
+      "concerts",
+      "concert"
+    ],
+    "entertainment": [
+      "entertaining"
+    ],
+    "gallery": [
+      "museum"
+    ],
+    "gastropubs": [
+      "gastropub"
+    ],
+    "multiple sports": [
+      "multiple sport",
+      "multi sport",
+      "multi sports",
+      "sports",
+      "sporting"
+    ],
+    "museum": [
+      "museums",
+      "gallery",
+      "galleries"
+    ],
+    "night club": [
+      "night clubs",
+      "nightclub",
+      "nightclubs",
+      "club",
+      "clubs"
+    ],
+    "park": [
+      "parks"
+    ],
+    "pool": [
+      "swimming pool",
+      "swimming",
+      "pools",
+      "swimmingpool",
+      "water",
+      "swim"
+    ],
+    "sports": [
+      "multiple sport",
+      "multi sport",
+      "multi sports",
+      "multiple sports",
+      "sporting"
+    ],
+    "swimming pool": [
+      "swimming",
+      "pool",
+      "pools",
+      "swimmingpool",
+      "water",
+      "swim"
+    ],
+    "theater": [
+      "theatre",
+      "theatres",
+      "theaters"
+    ],
+    "theatre": [
+      "theater",
+      "theatres",
+      "theaters"
+    ],
+    "abbey pool and astroturf pitch": [
+      "abbey pool and astroturf",
+      "abbey pool"
+    ],
+    "abbey pool and astroturf": [
+      "abbey pool and astroturf pitch",
+      "abbey pool"
+    ],
+    "abbey pool": [
+      "abbey pool and astroturf pitch",
+      "abbey pool and astroturf"
+    ],
+    "adc theatre": [
+      "adc theater",
+      "adc"
+    ],
+    "adc": [
+      "adc theatre",
+      "adc theater"
+    ],
+    "addenbrookes hospital": [
+      "addenbrooke's hospital"
+    ],
+    "cafe jello gallery": [
+      "cafe jello"
+    ],
+    "cambridge and county folk museum": [
+      "cambridge and country folk museum",
+      "county folk museum"
+    ],
+    "cambridge and country folk museum": [
+      "cambridge and county folk museum",
+      "county folk museum"
+    ],
+    "county folk museum": [
+      "cambridge and county folk museum",
+      "cambridge and country folk museum"
+    ],
+    "cambridge arts theatre": [
+      "cambridge arts theater"
+    ],
+    "cambridge book and print gallery": [
+      "book and print gallery"
+    ],
+    "cambridge contemporary art": [
+      "cambridge contemporary art museum",
+      "contemporary art museum"
+    ],
+    "cambridge contemporary art museum": [
+      "cambridge contemporary art",
+      "contemporary art museum"
+    ],
+    "cambridge corn exchange": [
+      "the cambridge corn exchange"
+    ],
+    "the cambridge corn exchange": [
+      "cambridge corn exchange"
+    ],
+    "cambridge museum of technology": [
+      "museum of technology"
+    ],
+    "cambridge punter": [
+      "the cambridge punter",
+      "cambridge punters"
+    ],
+    "cambridge punters": [
+      "the cambridge punter",
+      "cambridge punter"
+    ],
+    "the cambridge punter": [
+      "cambridge punter",
+      "cambridge punters"
+    ],
+    "cambridge university botanic gardens": [
+      "cambridge university botanical gardens",
+      "cambridge university botanical garden",
+      "cambridge university botanic garden",
+      "cambridge botanic gardens",
+      "cambridge botanical gardens",
+      "cambridge botanic garden",
+      "cambridge botanical garden",
+      "botanic gardens",
+      "botanical gardens",
+      "botanic garden",
+      "botanical garden"
+    ],
+    "cambridge botanic gardens": [
+      "cambridge university botanic gardens",
+      "cambridge university botanical gardens",
+      "cambridge university botanical garden",
+      "cambridge university botanic garden",
+      "cambridge botanical gardens",
+      "cambridge botanic garden",
+      "cambridge botanical garden",
+      "botanic gardens",
+      "botanical gardens",
+      "botanic garden",
+      "botanical garden"
+    ],
+    "botanic gardens": [
+      "cambridge university botanic gardens",
+      "cambridge university botanical gardens",
+      "cambridge university botanical garden",
+      "cambridge university botanic garden",
+      "cambridge botanic gardens",
+      "cambridge botanical gardens",
+      "cambridge botanic garden",
+      "cambridge botanical garden",
+      "botanical gardens",
+      "botanic garden",
+      "botanical garden"
+    ],
+    "cherry hinton village centre": [
+      "cherry hinton village center"
+    ],
+    "cherry hinton village center": [
+      "cherry hinton village centre"
+    ],
+    "cherry hinton hall and grounds": [
+      "cherry hinton hall"
+    ],
+    "cherry hinton hall": [
+      "cherry hinton hall and grounds"
+    ],
+    "cherry hinton water play": [
+      "cherry hinton water play park"
+    ],
+    "cherry hinton water play park": [
+      "cherry hinton water play"
+    ],
+    "christ college": [
+      "christ's college",
+      "christs college"
+    ],
+    "christs college": [
+      "christ college",
+      "christ's college"
+    ],
+    "churchills college": [
+      "churchill's college",
+      "churchill college"
+    ],
+    "cineworld cinema": [
+      "cineworld"
+    ],
+    "clair hall": [
+      "clare hall"
+    ],
+    "clare hall": [
+      "clair hall"
+    ],
+    "the fez club": [
+      "fez club"
+    ],
+    "great saint marys church": [
+      "great saint mary's church",
+      "great saint mary's",
+      "great saint marys"
+    ],
+    "jesus green outdoor pool": [
+      "jesus green"
+    ],
+    "jesus green": [
+      "jesus green outdoor pool"
+    ],
+    "kettles yard": [
+      "kettle's yard"
+    ],
+    "kings college": [
+      "king's college"
+    ],
+    "kings hedges learner pool": [
+      "king's hedges learner pool",
+      "king hedges learner pool"
+    ],
+    "king hedges learner pool": [
+      "king's hedges learner pool",
+      "kings hedges learner pool"
+    ],
+    "little saint marys church": [
+      "little saint mary's church",
+      "little saint mary's",
+      "little saint marys"
+    ],
+    "mumford theatre": [
+      "mumford theater"
+    ],
+    "museum of archaelogy": [
+      "museum of archaeology"
+    ],
+    "museum of archaelogy and anthropology": [
+      "museum of archaeology and anthropology"
+    ],
+    "peoples portraits exhibition": [
+      "people's portraits exhibition at girton college",
+      "peoples portraits exhibition at girton college",
+      "people's portraits exhibition"
+    ],
+    "peoples portraits exhibition at girton college": [
+      "people's portraits exhibition at girton college",
+      "people's portraits exhibition",
+      "peoples portraits exhibition"
+    ],
+    "queens college": [
+      "queens' college",
+      "queen's college"
+    ],
+    "riverboat georgina": [
+      "riverboat"
+    ],
+    "saint barnabas": [
+      "saint barbabas press gallery"
+    ],
+    "saint barnabas press gallery": [
+      "saint barbabas"
+    ],
+    "saint catharines college": [
+      "saint catharine's college",
+      "saint catharine's"
+    ],
+    "saint johns college": [
+      "saint john's college",
+      "st john's college",
+      "st johns college"
+    ],
+    "scott polar": [
+      "scott polar museum"
+    ],
+    "scott polar museum": [
+      "scott polar"
+    ],
+    "scudamores punting co": [
+      "scudamore's punting co",
+      "scudamores punting",
+      "scudamore's punting",
+      "scudamores",
+      "scudamore's",
+      "scudamore"
+    ],
+    "scudamore": [
+      "scudamore's punting co",
+      "scudamores punting co",
+      "scudamores punting",
+      "scudamore's punting",
+      "scudamores",
+      "scudamore's"
+    ],
+    "sheeps green and lammas land park fen causeway": [
+      "sheep's green and lammas land park fen causeway",
+      "sheep's green and lammas land park",
+      "sheeps green and lammas land park",
+      "lammas land park",
+      "sheep's green",
+      "sheeps green"
+    ],
+    "sheeps green and lammas land park": [
+      "sheep's green and lammas land park fen causeway",
+      "sheeps green and lammas land park fen causeway",
+      "sheep's green and lammas land park",
+      "lammas land park",
+      "sheep's green",
+      "sheeps green"
+    ],
+    "lammas land park": [
+      "sheep's green and lammas land park fen causeway",
+      "sheeps green and lammas land park fen causeway",
+      "sheep's green and lammas land park",
+      "sheeps green and lammas land park",
+      "sheep's green",
+      "sheeps green"
+    ],
+    "sheeps green": [
+      "sheep's green and lammas land park fen causeway",
+      "sheeps green and lammas land park fen causeway",
+      "sheep's green and lammas land park",
+      "sheeps green and lammas land park",
+      "lammas land park",
+      "sheep's green"
+    ],
+    "soul tree nightclub": [
+      "soul tree night club",
+      "soul tree",
+      "soultree"
+    ],
+    "soultree": [
+      "soul tree nightclub",
+      "soul tree night club",
+      "soul tree"
+    ],
+    "the man on the moon": [
+      "man on the moon"
+    ],
+    "man on the moon": [
+      "the man on the moon"
+    ],
+    "the junction": [
+      "junction theatre",
+      "junction theater"
+    ],
+    "junction theatre": [
+      "the junction",
+      "junction theater"
+    ],
+    "old schools": [
+      "old school"
+    ],
+    "vue cinema": [
+      "vue"
+    ],
+    "wandlebury country park": [
+      "the wandlebury"
+    ],
+    "the wandlebury": [
+      "wandlebury country park"
+    ],
+    "whipple museum of the history of science": [
+      "whipple museum",
+      "history of science museum"
+    ],
+    "history of science museum": [
+      "whipple museum of the history of science",
+      "whipple museum"
+    ],
+    "williams art and antique": [
+      "william's art and antique"
+    ],
+    "alimentum": [
+      "restaurant alimentum"
+    ],
+    "restaurant alimentum": [
+      "alimentum"
+    ],
+    "bedouin": [
+      "the bedouin"
+    ],
+    "the bedouin": [
+      "bedouin"
+    ],
+    "bloomsbury restaurant": [
+      "bloomsbury"
+    ],
+    "cafe uno": [
+      "caffe uno",
+      "caffee uno"
+    ],
+    "caffe uno": [
+      "cafe uno",
+      "caffee uno"
+    ],
+    "caffee uno": [
+      "cafe uno",
+      "caffe uno"
+    ],
+    "cambridge lodge restaurant": [
+      "cambridge lodge"
+    ],
+    "chiquito": [
+      "chiquito restaurant bar",
+      "chiquito restaurant"
+    ],
+    "chiquito restaurant bar": [
+      "chiquito restaurant",
+      "chiquito"
+    ],
+    "city stop restaurant": [
+      "city stop"
+    ],
+    "cityr": [
+      "cityroomz"
+    ],
+    "citiroomz": [
+      "cityroomz"
+    ],
+    "clowns cafe": [
+      "clown's cafe"
+    ],
+    "cow pizza kitchen and bar": [
+      "the cow pizza kitchen and bar",
+      "cow pizza"
+    ],
+    "the cow pizza kitchen and bar": [
+      "cow pizza kitchen and bar",
+      "cow pizza"
+    ],
+    "darrys cookhouse and wine shop": [
+      "darry's cookhouse and wine shop",
+      "darry's cookhouse",
+      "darrys cookhouse"
+    ],
+    "de luca cucina and bar": [
+      "de luca cucina and bar riverside brasserie",
+      "luca cucina and bar",
+      "de luca cucina",
+      "luca cucina"
+    ],
+    "de luca cucina and bar riverside brasserie": [
+      "de luca cucina and bar",
+      "luca cucina and bar",
+      "de luca cucina",
+      "luca cucina"
+    ],
+    "da vinci pizzeria": [
+      "da vinci pizza",
+      "da vinci"
+    ],
+    "don pasquale pizzeria": [
+      "don pasquale pizza",
+      "don pasquale",
+      "pasquale pizzeria",
+      "pasquale pizza"
+    ],
+    "efes": [
+      "efes restaurant"
+    ],
+    "efes restaurant": [
+      "efes"
+    ],
+    "fitzbillies restaurant": [
+      "fitzbillies"
+    ],
+    "frankie and bennys": [
+      "frankie and benny's"
+    ],
+    "funky": [
+      "funky fun house"
+    ],
+    "funky fun house": [
+      "funky"
+    ],
+    "gardenia": [
+      "the gardenia"
+    ],
+    "the gardenia": [
+      "gardenia"
+    ],
+    "grafton hotel restaurant": [
+      "the grafton hotel",
+      "grafton hotel"
+    ],
+    "the grafton hotel": [
+      "grafton hotel restaurant",
+      "grafton hotel"
+    ],
+    "grafton hotel": [
+      "grafton hotel restaurant",
+      "the grafton hotel"
+    ],
+    "hotel du vin and bistro": [
+      "hotel du vin",
+      "du vin"
+    ],
+    "Kohinoor": [
+      "kohinoor",
+      "the kohinoor"
+    ],
+    "kohinoor": [
+      "the kohinoor"
+    ],
+    "the kohinoor": [
+      "kohinoor"
+    ],
+    "lan hong house": [
+      "lan hong",
+      "ian hong house",
+      "ian hong"
+    ],
+    "ian hong": [
+      "lan hong house",
+      "lan hong",
+      "ian hong house"
+    ],
+    "lovel": [
+      "the lovell lodge",
+      "lovell lodge"
+    ],
+    "lovell lodge": [
+      "lovell"
+    ],
+    "the lovell lodge": [
+      "lovell lodge",
+      "lovell"
+    ],
+    "mahal of cambridge": [
+      "mahal"
+    ],
+    "mahal": [
+      "mahal of cambridge"
+    ],
+    "maharajah tandoori restaurant": [
+      "maharajah tandoori"
+    ],
+    "the maharajah tandoor": [
+      "maharajah tandoori restaurant",
+      "maharajah tandoori"
+    ],
+    "meze bar": [
+      "meze bar restaurant",
+      "the meze bar"
+    ],
+    "meze bar restaurant": [
+      "the meze bar",
+      "meze bar"
+    ],
+    "the meze bar": [
+      "meze bar restaurant",
+      "meze bar"
+    ],
+    "michaelhouse cafe": [
+      "michael house cafe"
+    ],
+    "midsummer house restaurant": [
+      "midsummer house"
+    ],
+    "missing sock": [
+      "the missing sock"
+    ],
+    "the missing sock": [
+      "missing sock"
+    ],
+    "nandos": [
+      "nando's city centre",
+      "nando's city center",
+      "nandos city centre",
+      "nandos city center",
+      "nando's"
+    ],
+    "nandos city centre": [
+      "nando's city centre",
+      "nando's city center",
+      "nandos city center",
+      "nando's",
+      "nandos"
+    ],
+    "oak bistro": [
+      "the oak bistro"
+    ],
+    "the oak bistro": [
+      "oak bistro"
+    ],
+    "one seven": [
+      "restaurant one seven"
+    ],
+    "restaurant one seven": [
+      "one seven"
+    ],
+    "river bar steakhouse and grill": [
+      "the river bar steakhouse and grill",
+      "the river bar steakhouse",
+      "river bar steakhouse"
+    ],
+    "the river bar steakhouse and grill": [
+      "river bar steakhouse and grill",
+      "the river bar steakhouse",
+      "river bar steakhouse"
+    ],
+    "pipasha restaurant": [
+      "pipasha"
+    ],
+    "pizza hut city centre": [
+      "pizza hut city center"
+    ],
+    "pizza hut fenditton": [
+      "pizza hut fen ditton",
+      "pizza express fen ditton"
+    ],
+    "restaurant two two": [
+      "two two",
+      "restaurant 22"
+    ],
+    "saffron brasserie": [
+      "saffron"
+    ],
+    "saint johns chop house": [
+      "saint john's chop house",
+      "st john's chop house",
+      "st johns chop house"
+    ],
+    "sesame restaurant and bar": [
+      "sesame restaurant",
+      "sesame"
+    ],
+    "shanghai": [
+      "shanghai family restaurant"
+    ],
+    "shanghai family restaurant": [
+      "shanghai"
+    ],
+    "sitar": [
+      "sitar tandoori"
+    ],
+    "sitar tandoori": [
+      "sitar"
+    ],
+    "slug and lettuce": [
+      "the slug and lettuce"
+    ],
+    "the slug and lettuce": [
+      "slug and lettuce"
+    ],
+    "st johns chop house": [
+      "saint john's chop house",
+      "st john's chop house",
+      "saint johns chop house"
+    ],
+    "stazione restaurant and coffee bar": [
+      "stazione restaurant",
+      "stazione"
+    ],
+    "thanh binh": [
+      "thanh",
+      "binh"
+    ],
+    "thanh": [
+      "thanh binh",
+      "binh"
+    ],
+    "binh": [
+      "thanh binh",
+      "thanh"
+    ],
+    "the hotpot": [
+      "the hotspot",
+      "hotpot",
+      "hotspot"
+    ],
+    "hotpot": [
+      "the hotpot",
+      "the hotpot",
+      "hotspot"
+    ],
+    "the lucky star": [
+      "lucky star"
+    ],
+    "lucky star": [
+      "the lucky star"
+    ],
+    "the peking restaurant: ": [
+      "peking restaurant"
+    ],
+    "the varsity restaurant": [
+      "varsity restaurant",
+      "the varsity",
+      "varsity"
+    ],
+    "two two": [
+      "restaurant two two",
+      "restaurant 22"
+    ],
+    "restaurant 22": [
+      "restaurant two two",
+      "two two"
+    ],
+    "zizzi cambridge": [
+      "zizzi"
+    ],
+    "american": [
+      "americas"
+    ],
+    "asian oriental": [
+      "asian",
+      "oriental"
+    ],
+    "australian": [
+      "australasian"
+    ],
+    "barbeque": [
+      "barbecue",
+      "bbq"
+    ],
+    "corsica": [
+      "corsican"
+    ],
+    "indian": [
+      "tandoori"
+    ],
+    "italian": [
+      "pizza",
+      "pizzeria"
+    ],
+    "japanese": [
+      "sushi"
+    ],
+    "latin american": [
+      "latin-american",
+      "latin"
+    ],
+    "malaysian": [
+      "malay"
+    ],
+    "middle eastern": [
+      "middle-eastern"
+    ],
+    "traditional american": [
+      "american"
+    ],
+    "modern american": [
+      "american modern",
+      "american"
+    ],
+    "modern european": [
+      "european modern",
+      "european"
+    ],
+    "north american": [
+      "north-american",
+      "american"
+    ],
+    "portuguese": [
+      "portugese"
+    ],
+    "portugese": [
+      "portuguese"
+    ],
+    "seafood": [
+      "sea food"
+    ],
+    "singaporean": [
+      "singapore"
+    ],
+    "steakhouse": [
+      "steak house",
+      "steak"
+    ],
+    "the americas": [
+      "american",
+      "americas"
+    ],
+    "a and b guest house": [
+      "a & b guest house",
+      "a and b",
+      "a & b"
+    ],
+    "the acorn guest house": [
+      "acorn guest house",
+      "acorn"
+    ],
+    "acorn guest house": [
+      "the acorn guest house",
+      "acorn"
+    ],
+    "alexander bed and breakfast": [
+      "alexander"
+    ],
+    "allenbell": [
+      "the allenbell"
+    ],
+    "the allenbell": [
+      "allenbell"
+    ],
+    "alpha-milton guest house": [
+      "the alpha-milton",
+      "alpha-milton"
+    ],
+    "the alpha-milton": [
+      "alpha-milton guest house",
+      "alpha-milton"
+    ],
+    "arbury lodge guest house": [
+      "arbury lodge",
+      "arbury"
+    ],
+    "archway house": [
+      "archway"
+    ],
+    "ashley hotel": [
+      "the ashley hotel",
+      "ashley"
+    ],
+    "the ashley hotel": [
+      "ashley hotel",
+      "ashley"
+    ],
+    "aylesbray lodge guest house": [
+      "aylesbray lodge",
+      "aylesbray"
+    ],
+    "aylesbray lodge guest": [
+      "aylesbray lodge guest house",
+      "aylesbray lodge",
+      "aylesbray"
+    ],
+    "alesbray lodge guest house": [
+      "aylesbray lodge guest house",
+      "aylesbray lodge",
+      "aylesbray"
+    ],
+    "alyesbray lodge hotel": [
+      "aylesbray lodge guest house",
+      "aylesbray lodge",
+      "aylesbray"
+    ],
+    "bridge guest house": [
+      "bridge house"
+    ],
+    "cambridge belfry": [
+      "the cambridge belfry",
+      "belfry hotel",
+      "belfry"
+    ],
+    "the cambridge belfry": [
+      "cambridge belfry",
+      "belfry hotel",
+      "belfry"
+    ],
+    "belfry hotel": [
+      "the cambridge belfry",
+      "cambridge belfry",
+      "belfry"
+    ],
+    "carolina bed and breakfast": [
+      "carolina"
+    ],
+    "city centre north": [
+      "city centre north bed and breakfast"
+    ],
+    "north b and b": [
+      "city centre north bed and breakfast"
+    ],
+    "city centre north b and b": [
+      "city centre north bed and breakfast"
+    ],
+    "el shaddia guest house": [
+      "el shaddai guest house",
+      "el shaddai",
+      "el shaddia"
+    ],
+    "el shaddai guest house": [
+      "el shaddia guest house",
+      "el shaddai",
+      "el shaddia"
+    ],
+    "express by holiday inn cambridge": [
+      "express by holiday inn",
+      "holiday inn cambridge",
+      "holiday inn"
+    ],
+    "holiday inn": [
+      "express by holiday inn cambridge",
+      "express by holiday inn",
+      "holiday inn cambridge"
+    ],
+    "finches bed and breakfast": [
+      "finches"
+    ],
+    "gonville hotel": [
+      "gonville"
+    ],
+    "hamilton lodge": [
+      "the hamilton lodge",
+      "hamilton"
+    ],
+    "the hamilton lodge": [
+      "hamilton lodge",
+      "hamilton"
+    ],
+    "hobsons house": [
+      "hobson's house",
+      "hobson's"
+    ],
+    "huntingdon marriott hotel": [
+      "huntington marriott hotel",
+      "huntington marriot hotel",
+      "huntingdon marriot hotel",
+      "huntington marriott",
+      "huntingdon marriott",
+      "huntington marriot",
+      "huntingdon marriot",
+      "huntington",
+      "huntingdon"
+    ],
+    "kirkwood": [
+      "kirkwood house"
+    ],
+    "kirkwood house": [
+      "kirkwood"
+    ],
+    "lensfield hotel": [
+      "the lensfield hotel",
+      "lensfield"
+    ],
+    "the lensfield hotel": [
+      "lensfield hotel",
+      "lensfield"
+    ],
+    "leverton house": [
+      "leverton"
+    ],
+    "marriot hotel": [
+      "marriott hotel",
+      "marriott"
+    ],
+    "rosas bed and breakfast": [
+      "rosa's bed and breakfast",
+      "rosa's",
+      "rosas"
+    ],
+    "university arms hotel": [
+      "university arms"
+    ],
+    "warkworth house": [
+      "warkworth hotel",
+      "warkworth"
+    ],
+    "warkworth hotel": [
+      "warkworth house",
+      "warkworth"
+    ],
+    "wartworth": [
+      "warkworth house",
+      "warkworth hotel",
+      "warkworth"
+    ],
+    "worth house": [
+      "the worth house"
+    ],
+    "the worth house": [
+      "worth house"
+    ],
+    "birmingham new street": [
+      "birmingham new street train station"
+    ],
+    "birmingham new street train station": [
+      "birmingham new street"
+    ],
+    "bishops stortford": [
+      "bishops stortford train station"
+    ],
+    "bishops stortford train station": [
+      "bishops stortford"
+    ],
+    "broxbourne": [
+      "broxbourne train station"
+    ],
+    "broxbourne train station": [
+      "broxbourne"
+    ],
+    "cambridge": [
+      "cambridge train station"
+    ],
+    "cambridge train station": [
+      "cambridge"
+    ],
+    "ely": [
+      "ely train station"
+    ],
+    "ely train station": [
+      "ely"
+    ],
+    "kings lynn": [
+      "king's lynn",
+      "king's lynn train station",
+      "kings lynn train station"
+    ],
+    "kings lynn train station": [
+      "kings lynn",
+      "king's lynn",
+      "king's lynn train station"
+    ],
+    "leicester": [
+      "leicester train station"
+    ],
+    "leicester train station": [
+      "leicester"
+    ],
+    "london kings cross": [
+      "kings cross",
+      "king's cross",
+      "london king's cross",
+      "kings cross train station",
+      "king's cross train station",
+      "london king's cross train station",
+      "london kings cross train station"
+    ],
+    "london kings cross train station": [
+      "kings cross",
+      "king's cross",
+      "london king's cross",
+      "london kings cross",
+      "kings cross train station",
+      "king's cross train station",
+      "london king's cross train station"
+    ],
+    "london liverpool": [
+      "liverpool street",
+      "london liverpool street",
+      "london liverpool train station",
+      "liverpool street train station",
+      "london liverpool street train station"
+    ],
+    "london liverpool street": [
+      "london liverpool",
+      "liverpool street",
+      "london liverpool train station",
+      "liverpool street train station",
+      "london liverpool street train station"
+    ],
+    "london liverpool street train station": [
+      "london liverpool",
+      "liverpool street",
+      "london liverpool street",
+      "london liverpool train station",
+      "liverpool street train station"
+    ],
+    "norwich": [
+      "norwich train station"
+    ],
+    "norwich train station": [
+      "norwich"
+    ],
+    "peterborough": [
+      "peterborough train station"
+    ],
+    "peterborough train station": [
+      "peterborough"
+    ],
+    "stansted airport": [
+      "stansted airport train station"
+    ],
+    "stansted airport train station": [
+      "stansted airport"
+    ],
+    "stevenage": [
+      "stevenage train station"
+    ],
+    "stevenage train station": [
+      "stevenage"
+    ]
+  },
+  "occur_list": [
+    "Buses_2-departure_date&Buses_2-origin",
+    "Buses_2-departure_date&Buses_2-destination",
+    "Buses_2-destination&Buses_2-origin",
+    "Events_2-city&Events_2-event_type",
+    "Events_2-city&Events_2-event_name",
+    "Events_2-city&Events_2-date",
+    "Events_2-date&Events_2-event_name",
+    "Events_2-city&Events_2-number_of_tickets",
+    "Events_2-date&Events_2-number_of_tickets",
+    "Events_2-event_name&Events_2-number_of_tickets",
+    "Restaurants_1-city&Restaurants_1-cuisine",
+    "Restaurants_1-city&Restaurants_1-restaurant_name",
+    "Restaurants_1-cuisine&Restaurants_1-restaurant_name",
+    "Restaurants_1-city&Restaurants_1-time",
+    "Restaurants_1-cuisine&Restaurants_1-time",
+    "Restaurants_1-restaurant_name&Restaurants_1-time",
+    "Restaurants_1-city&Restaurants_1-date",
+    "Restaurants_1-city&Restaurants_1-party_size",
+    "Restaurants_1-cuisine&Restaurants_1-date",
+    "Restaurants_1-date&Restaurants_1-party_size",
+    "Restaurants_1-date&Restaurants_1-restaurant_name",
+    "Restaurants_1-date&Restaurants_1-time",
+    "Restaurants_1-party_size&Restaurants_1-restaurant_name",
+    "Restaurants_1-party_size&Restaurants_1-time",
+    "Flights_1-departure_date&Flights_1-origin_city",
+    "Flights_1-departure_date&Flights_1-outbound_departure_time",
+    "Flights_1-origin_city&Flights_1-outbound_departure_time",
+    "Flights_1-airlines&Flights_1-departure_date",
+    "Flights_1-airlines&Flights_1-destination_city",
+    "Flights_1-airlines&Flights_1-origin_city",
+    "Flights_1-airlines&Flights_1-outbound_departure_time",
+    "Flights_1-departure_date&Flights_1-destination_city",
+    "Flights_1-departure_date&Flights_1-return_date",
+    "Flights_1-destination_city&Flights_1-origin_city",
+    "Flights_1-destination_city&Flights_1-outbound_departure_time",
+    "Flights_1-destination_city&Flights_1-return_date",
+    "Flights_1-origin_city&Flights_1-return_date",
+    "Flights_1-airlines&Flights_1-passengers",
+    "Flights_1-airlines&Flights_1-seating_class",
+    "Flights_1-departure_date&Flights_1-passengers",
+    "Flights_1-departure_date&Flights_1-seating_class",
+    "Flights_1-destination_city&Flights_1-passengers",
+    "Flights_1-destination_city&Flights_1-seating_class",
+    "Flights_1-origin_city&Flights_1-passengers",
+    "Flights_1-origin_city&Flights_1-seating_class"
+  ],
+  "description": {
+    "Banks_1-account_type": "The account type of the user",
+    "Banks_1-recipient_account_type": "The account type of the recipient whom the user is transfering money to",
+    "Banks_1-balance": "The amount of money held in a bank account at a given time",
+    "Banks_1-amount": "The amount of money to transfer",
+    "Banks_1-recipient_account_name": "The account name of the recipient who is to receive the transfered money",
+    "Buses_1-from_location": "City where bus is leaving from",
+    "Buses_1-to_location": "City where bus is going to",
+    "Buses_1-from_station": "Station where bus is leaving from",
+    "Buses_1-to_station": "Station where bus is going to",
+    "Buses_1-leaving_date": "Date of bus leaving for journey",
+    "Buses_1-leaving_time": "Time of bus leaving for journey",
+    "Buses_1-fare": "Fare per ticket for journey",
+    "Buses_1-travelers": "Number of travelers for journey",
+    "Buses_1-transfers": "Number of transfers in journey",
+    "Buses_2-origin": "Origin city for journey",
+    "Buses_2-destination": "Destination city for journey",
+    "Buses_2-origin_station_name": "Name of the bus terminus at the origin",
+    "Buses_2-destination_station_name": "Name of the bus terminus at the destination",
+    "Buses_2-departure_date": "Date of bus departure",
+    "Buses_2-price": "Price per ticket of the itinerary",
+    "Buses_2-departure_time": "Time of bus departure",
+    "Buses_2-group_size": "Size of group for the booking",
+    "Buses_2-fare_type": "Type of fare for the booking",
+    "Calendar_1-event_date": "Date of event or for checking availability",
+    "Calendar_1-event_time": "Start time of event",
+    "Calendar_1-event_location": "Location of event",
+    "Calendar_1-event_name": "Title of event",
+    "Calendar_1-available_start_time": "Starting time of available time slot",
+    "Calendar_1-available_end_time": "Ending time of available time slot",
+    "Events_1-category": "Type of event",
+    "Events_1-subcategory": "Subcategory of event, either a music genre or sport name",
+    "Events_1-event_name": "Name of event",
+    "Events_1-date": "Date of occurrence of event",
+    "Events_1-time": "Time when the event is scheduled to start",
+    "Events_1-number_of_seats": "Number of seats to find event tickets for",
+    "Events_1-city_of_event": "City where event is happening",
+    "Events_1-event_location": "Name of event location",
+    "Events_1-address_of_location": "Street address of event location",
+    "Events_2-event_type": "Type of event",
+    "Events_2-category": "The sport or music subcategory",
+    "Events_2-event_name": "Name of match or artist for event",
+    "Events_2-date": "Date of event",
+    "Events_2-time": "Starting time for event",
+    "Events_2-number_of_tickets": "Number of tickets to buy for event",
+    "Events_2-city": "City where the event is taking place",
+    "Events_2-venue": "Exact venue of event",
+    "Events_2-venue_address": "Address of event venue",
+    "Flights_1-passengers": "Number of passengers in the booking",
+    "Flights_1-seating_class": "Seating class for the booking",
+    "Flights_1-origin_city": "Starting city for the trip",
+    "Flights_1-destination_city": "Ending city for the trip",
+    "Flights_1-origin_airport": "Airport at the starting city for the trip",
+    "Flights_1-destination_airport": "Airport at the ending city for the trip",
+    "Flights_1-departure_date": "Start date for the trip",
+    "Flights_1-return_date": "Date of the return flight",
+    "Flights_1-number_stops": "Number of layovers in the flight",
+    "Flights_1-outbound_departure_time": "Departure time for the outbound leg flight",
+    "Flights_1-outbound_arrival_time": "Arrival time for the outbound leg flight",
+    "Flights_1-inbound_arrival_time": "Arrival time for the return leg flight",
+    "Flights_1-inbound_departure_time": "Departure time for the return leg flight",
+    "Flights_1-price": "Price of the booking per passenger",
+    "Flights_1-refundable": "Whether the booking is refundable or not",
+    "Flights_1-airlines": "Name of airline",
+    "Flights_2-passengers": "Number of passengers to book tickets for",
+    "Flights_2-seating_class": "Seating class for the flight tickets",
+    "Flights_2-origin": "City of origin for the flight",
+    "Flights_2-destination": "City of destination for the flight",
+    "Flights_2-origin_airport": "Airport where the flight is departing from",
+    "Flights_2-destination_airport": "Airport where the flight is arriving to",
+    "Flights_2-departure_date": "Date of departure flight on the ticket",
+    "Flights_2-return_date": "Date of return flight on the ticket",
+    "Flights_2-number_stops": "Number of stopovers made by the flight",
+    "Flights_2-outbound_departure_time": "Departure time of the origin-destination flight",
+    "Flights_2-outbound_arrival_time": "Arrival time of the origin-destination flight",
+    "Flights_2-inbound_arrival_time": "Arrival time of the destination-origin flight",
+    "Flights_2-inbound_departure_time": "Departure time of the destination-origin flight",
+    "Flights_2-fare": "Ticket fare for each passenger",
+    "Flights_2-is_redeye": "Boolean flag indicating whether the flight is a red-eye flight",
+    "Flights_2-airlines": "Name of the airline to book with",
+    "Homes_1-area": "City where the apartment is located",
+    "Homes_1-address": "Address of the apartment",
+    "Homes_1-property_name": "Name of the apartment",
+    "Homes_1-phone_number": "Phone number of the apartment",
+    "Homes_1-furnished": "Boolean flag indicating if the property is furnished",
+    "Homes_1-pets_allowed": "Boolean flag indicating if pets are allowed",
+    "Homes_1-rent": "Rent per month of the apartment",
+    "Homes_1-visit_date": "Date for the visit to the apartment",
+    "Homes_1-number_of_beds": "Number of bed rooms",
+    "Homes_1-number_of_baths": "Number of baths in the apartment",
+    "Hotels_1-destination": "Location of the hotel",
+    "Hotels_1-number_of_rooms": "Number of rooms in the reservation",
+    "Hotels_1-check_in_date": "Start date for the reservation",
+    "Hotels_1-number_of_days": "Number of days in the reservation",
+    "Hotels_1-star_rating": "Star rating of the hotel",
+    "Hotels_1-hotel_name": "Name of the hotel",
+    "Hotels_1-street_address": "Address of the hotel",
+    "Hotels_1-phone_number": "Phone number of the hotel",
+    "Hotels_1-price_per_night": "Price per night for the reservation",
+    "Hotels_1-has_wifi": "Boolean flag indicating if the hotel has wifi",
+    "Hotels_2-where_to": "Location of the house",
+    "Hotels_2-number_of_adults": "Number of people for the reservation",
+    "Hotels_2-check_in_date": "Start date for the reservation or to find the house",
+    "Hotels_2-check_out_date": "End date for the reservation or to find the house",
+    "Hotels_2-rating": "Review rating of the house",
+    "Hotels_2-address": "Address of the house",
+    "Hotels_2-phone_number": "Phone number of the house",
+    "Hotels_2-total_price": "Price per night of the house",
+    "Hotels_2-has_laundry_service": "Boolean flag indicating if the house has laundry service",
+    "Hotels_3-location": "Location of the hotel",
+    "Hotels_3-number_of_rooms": "Number of rooms to book",
+    "Hotels_3-check_in_date": "Start date for the hotel reservation",
+    "Hotels_3-check_out_date": "End date for the hotel reservation",
+    "Hotels_3-average_rating": "Average review rating for the hotel",
+    "Hotels_3-hotel_name": "Name of the hotel",
+    "Hotels_3-street_address": "Address of the hotel",
+    "Hotels_3-phone_number": "Phone number of the hotel",
+    "Hotels_3-price": "Total price for the stay",
+    "Hotels_3-pets_welcome": "Boolean flag indicating if pets are allowed in the hotel",
+    "Media_1-title": "Title of the movie",
+    "Media_1-genre": "Genre of the movie",
+    "Media_1-subtitles": "Boolean flag indicating if subtitles are desired for this movie",
+    "Media_1-directed_by": "Name of the director of the movie",
+    "Movies_1-price": "Price per ticket",
+    "Movies_1-number_of_tickets": "Number of the movie tickets to be purchased",
+    "Movies_1-show_type": "Type of show",
+    "Movies_1-theater_name": "Name of the theatre",
+    "Movies_1-show_time": "Time of the show",
+    "Movies_1-show_date": "Date of the show",
+    "Movies_1-genre": "Genre of the movie",
+    "Movies_1-street_address": "Address of the theatre",
+    "Movies_1-location": "City where the theatre is located",
+    "Movies_1-movie_name": "Name of the movie",
+    "Music_1-song_name": "Name of the song",
+    "Music_1-artist": "Artist who performed the song",
+    "Music_1-album": "Album the song belongs to",
+    "Music_1-genre": "Genre of the song",
+    "Music_1-year": "Year in which the song was released",
+    "Music_1-playback_device": "Playback device on which the song is to be played",
+    "Music_2-song_name": "Name of the song",
+    "Music_2-artist": "Name of the artist the song is performed by",
+    "Music_2-album": "Album the song belongs to",
+    "Music_2-genre": "Genre of the song",
+    "Music_2-playback_device": "Playback device on which the song is to be played",
+    "RentalCars_1-type": "Category to which rental car belongs",
+    "RentalCars_1-car_name": "Model name of rental car",
+    "RentalCars_1-pickup_location": "Location of rental car pickup",
+    "RentalCars_1-pickup_date": "Date of rental car pickup",
+    "RentalCars_1-pickup_time": "Time of rental car pickup",
+    "RentalCars_1-pickup_city": "City to pick up the rental car",
+    "RentalCars_1-dropoff_date": "Date of rental car drop-off",
+    "RentalCars_1-total_price": "Total price of car rental",
+    "RentalCars_2-car_type": "Type of car for rental",
+    "RentalCars_2-car_name": "Name of car model",
+    "RentalCars_2-pickup_location": "Pickup location for car rental",
+    "RentalCars_2-pickup_date": "Date of pickup for car rental",
+    "RentalCars_2-pickup_time": "Time of pickup for car rental",
+    "RentalCars_2-pickup_city": "City in which to pick up rental car",
+    "RentalCars_2-dropoff_date": "End date of car rental reservation",
+    "RentalCars_2-total_price": "Total price of rental reservation",
+    "Restaurants_1-restaurant_name": "Name of the restaurant",
+    "Restaurants_1-date": "Date for the reservation or to find availability",
+    "Restaurants_1-time": "Time for the reservation or to find availability",
+    "Restaurants_1-serves_alcohol": "Boolean flag indicating if the restaurant serves alcohol",
+    "Restaurants_1-has_live_music": "Boolean flag indicating if the restaurant has live music",
+    "Restaurants_1-phone_number": "Phone number of the restaurant",
+    "Restaurants_1-street_address": "Address of the restaurant",
+    "Restaurants_1-party_size": "Party size for a reservation",
+    "Restaurants_1-price_range": "Price range for the restaurant",
+    "Restaurants_1-city": "City in which the restaurant is located",
+    "Restaurants_1-cuisine": "Cuisine of food served in the restaurant",
+    "RideSharing_1-destination": "Destination for taxi ride",
+    "RideSharing_1-shared_ride": "Boolean flag whether ride is shared with other passengers",
+    "RideSharing_1-ride_fare": "Total fare for taxi ride",
+    "RideSharing_1-approximate_ride_duration": "Approximate duration of ride to the destination",
+    "RideSharing_1-number_of_riders": "Number of riders to call taxi for",
+    "RideSharing_2-destination": "Destination address or location for cab",
+    "RideSharing_2-ride_type": "Type of cab ride",
+    "RideSharing_2-ride_fare": "Total fare for cab ride",
+    "RideSharing_2-wait_time": "Expected waiting time for pick-up by cab",
+    "RideSharing_2-number_of_seats": "Number of seats to reserve in the cab",
+    "Services_1-stylist_name": "Name of the hair stylist/salon",
+    "Services_1-phone_number": "Phone number of the stylist/salon",
+    "Services_1-average_rating": "Average review rating for the stylist/salon",
+    "Services_1-is_unisex": "Boolean flag indicating if the salon is unisex",
+    "Services_1-street_address": "Address of the stylist/salon",
+    "Services_1-city": "City where the salon is located",
+    "Services_1-appointment_date": "Date for the appointment",
+    "Services_1-appointment_time": "Time of the appointment",
+    "Services_2-dentist_name": "Name of the dentist",
+    "Services_2-phone_number": "Phone number of the dentist",
+    "Services_2-address": "Address of the dentist",
+    "Services_2-city": "City where the dentist is located",
+    "Services_2-appointment_date": "Date for the appointment",
+    "Services_2-appointment_time": "Time for the appointment",
+    "Services_2-offers_cosmetic_services": "Boolean flag indicating if the dentist offers cosmetic services",
+    "Services_3-doctor_name": "Name of the doctor or the medical practice",
+    "Services_3-phone_number": "Contact number for the doctor or the medical practice",
+    "Services_3-average_rating": "Average review rating of the doctor",
+    "Services_3-street_address": "Address of the doctor",
+    "Services_3-city": "City where the doctor is located",
+    "Services_3-appointment_date": "Date for scheduling the appointment with the doctor",
+    "Services_3-appointment_time": "Time for the appointment with the doctor",
+    "Services_3-type": "Speciality of the doctor",
+    "Travel_1-location": "City or town where the attraction is located",
+    "Travel_1-attraction_name": "Common name of the attraction",
+    "Travel_1-category": "Category to which the attraction belongs",
+    "Travel_1-phone_number": "Phone number to contact the attraction",
+    "Travel_1-free_entry": "Boolean flag indicating whether entrance to attraction is free",
+    "Travel_1-good_for_kids": "Boolean flag indicating whether attraction is good for to take kids to",
+    "Weather_1-precipitation": "The possibility of rain or snow in percentage",
+    "Weather_1-humidity": "Percentage humidity",
+    "Weather_1-wind": "Wind speed in miles per hour",
+    "Weather_1-temperature": "Temperature in Fahrenheit",
+    "Weather_1-city": "Name of the city",
+    "Weather_1-date": "Date for the weather",
+    "Alarm_1-alarm_time": "Time of the alarm",
+    "Alarm_1-alarm_name": "Name of the alarm",
+    "Alarm_1-new_alarm_time": "Time to set for the new alarm",
+    "Alarm_1-new_alarm_name": "Name to use for the new alarm",
+    "Buses_3-from_city": "The city to depart from",
+    "Buses_3-to_city": "The destination city of the trip",
+    "Buses_3-from_station": "Name of station of departure",
+    "Buses_3-to_station": "Name of station of arrival",
+    "Buses_3-departure_date": "The date of departure",
+    "Buses_3-departure_time": "The time of departure",
+    "Buses_3-price": "Ticket price per passenger",
+    "Buses_3-additional_luggage": "Whether to carry excess baggage in the bus",
+    "Buses_3-num_passengers": "The number of tickets for the trip",
+    "Buses_3-category": "How many stops the route has",
+    "Events_3-event_type": "Type of cultural event",
+    "Events_3-event_name": "Name of artist or play",
+    "Events_3-date": "Date of event",
+    "Events_3-time": "Start time of event",
+    "Events_3-number_of_tickets": "Number of tickets to reserve for the event",
+    "Events_3-price_per_ticket": "Price of each ticket",
+    "Events_3-city": "City where the event is taking place",
+    "Events_3-venue": "Exact venue of event",
+    "Events_3-venue_address": "Street address of event venue",
+    "Flights_4-number_of_tickets": "the number of flight tickets for the trip",
+    "Flights_4-seating_class": "The cabin seat option",
+    "Flights_4-origin_airport": "The name of the airport or city to depart from",
+    "Flights_4-destination_airport": "The name of the airport or city to arrive at",
+    "Flights_4-departure_date": "Start date of the trip",
+    "Flights_4-return_date": "End date of the trip",
+    "Flights_4-is_nonstop": "Whether the flight is a direct one",
+    "Flights_4-outbound_departure_time": "Departure time of the flight flying to the destination",
+    "Flights_4-outbound_arrival_time": "Arrival time of the flight flying to the destination",
+    "Flights_4-inbound_arrival_time": "Arrival time of the flight coming back from the trip",
+    "Flights_4-inbound_departure_time": "Departure time of the flight coming back from the trip",
+    "Flights_4-price": "The total cost of the flight tickets",
+    "Flights_4-airlines": "The company that provides air transport services",
+    "Homes_2-intent": "Whether to buy or rent a property",
+    "Homes_2-area": "City where the property is located",
+    "Homes_2-address": "Street address of property",
+    "Homes_2-property_name": "Name of property or apartment complex",
+    "Homes_2-phone_number": "Contact number of property or apartment complex",
+    "Homes_2-has_garage": "Whether the property has a garage",
+    "Homes_2-in_unit_laundry": "Whether the property has in-unit laundry facilities",
+    "Homes_2-price": "Sale price or per-month rent of property",
+    "Homes_2-visit_date": "Date for visit to the property",
+    "Homes_2-number_of_beds": "Number of bedrooms in the property",
+    "Homes_2-number_of_baths": "Number of bathroom in the property",
+    "Hotels_4-location": "City or town where the accommodation is located",
+    "Hotels_4-number_of_rooms": "Number of rooms to reserve",
+    "Hotels_4-check_in_date": "Check in date for reservation",
+    "Hotels_4-stay_length": "Length of stay in days",
+    "Hotels_4-star_rating": "Star rating of the accommodation",
+    "Hotels_4-place_name": "Name of the accommodation",
+    "Hotels_4-street_address": "Street address of the accommodation",
+    "Hotels_4-phone_number": "Contact phone number of the accommodation",
+    "Hotels_4-price_per_night": "Price per night for the stay",
+    "Hotels_4-smoking_allowed": "Whether or not smoking is allowed inside the place",
+    "Media_3-title": "Title of the movie",
+    "Media_3-genre": "Category of the content",
+    "Media_3-subtitle_language": "Language of the subtitles",
+    "Media_3-starring": "Celebs acting in the movie",
+    "Messaging_1-location": "Location to share with contact",
+    "Messaging_1-contact_name": "Name of contact to send to",
+    "Movies_3-movie_title": "Name of the movie",
+    "Movies_3-genre": "Type of the movie",
+    "Movies_3-percent_rating": "Average critic percentage rating",
+    "Movies_3-cast": "Actors in the movie",
+    "Movies_3-directed_by": "Director of the movie",
+    "Music_3-track": "Name of the song",
+    "Music_3-artist": "Performer's name",
+    "Music_3-album": "Collection of the song",
+    "Music_3-genre": "Type of the music",
+    "Music_3-year": "Year when the song was first released",
+    "Music_3-device": "Place or name of the media player to play the song selected",
+    "Payment_1-payment_method": "The source of money used for making the payment",
+    "Payment_1-amount": "The amount of money to send or request",
+    "Payment_1-receiver": "Name of the contact or account to make the transaction with",
+    "Payment_1-private_visibility": "Whether the transaction is private or not",
+    "RentalCars_3-car_type": "Type of the car",
+    "RentalCars_3-car_name": "Car model",
+    "RentalCars_3-pickup_location": "Place to pick up the car",
+    "RentalCars_3-start_date": "The first date to start using the rental car",
+    "RentalCars_3-pickup_time": "Time for the pick-up",
+    "RentalCars_3-city": "City where you want to rent the car",
+    "RentalCars_3-end_date": "The date to return the car",
+    "RentalCars_3-price_per_day": "The cost for renting the car per day",
+    "RentalCars_3-add_insurance": "Whether to purchase insurance",
+    "Restaurants_2-restaurant_name": "Name of the restaurant",
+    "Restaurants_2-date": "Tentative date of restaurant reservation",
+    "Restaurants_2-time": "Tentative time of restaurant reservation",
+    "Restaurants_2-has_seating_outdoors": "Whether the restaurant has outdoor seating available",
+    "Restaurants_2-has_vegetarian_options": "Whether the restaurant has adequate vegetarian options",
+    "Restaurants_2-phone_number": "Phone number to contact restaurant",
+    "Restaurants_2-rating": "Average user rating for restaurant on a scale of 5",
+    "Restaurants_2-address": "Address of restaurant",
+    "Restaurants_2-number_of_seats": "Number of seats to reserve at the restaurant",
+    "Restaurants_2-price_range": "Price range for the restaurant",
+    "Restaurants_2-location": "City where the restaurant is located",
+    "Restaurants_2-category": "The category of food offered by the restaurant",
+    "Services_4-therapist_name": "Name of the therapist",
+    "Services_4-phone_number": "Contact number of the therapist",
+    "Services_4-address": "Address of the therapist",
+    "Services_4-city": "Area where user wants to search for a therapist",
+    "Services_4-appointment_date": "Date of the appointment",
+    "Services_4-appointment_time": "Time of the appointment",
+    "Services_4-type": "Type of the therapist",
+    "Trains_1-from": "Starting city for train journey",
+    "Trains_1-to": "Ending city for train journey",
+    "Trains_1-from_station": "Name of station at starting city",
+    "Trains_1-to_station": "Name of station at ending city",
+    "Trains_1-date_of_journey": "Date of train journey",
+    "Trains_1-journey_start_time": "Time of start of train journey",
+    "Trains_1-total": "Total price of train reservation",
+    "Trains_1-number_of_adults": "Number of adults to reserve train tickets for",
+    "Trains_1-class": "Fare class for train reservation",
+    "Trains_1-trip_protection": "Whether to add trip protection to reservation, for a fee",
+    "Banks_2-account_type": "The user's account type",
+    "Banks_2-recipient_account_type": "The account type of the recipient to transfer the money to",
+    "Banks_2-account_balance": "The balance in the specified account",
+    "Banks_2-transfer_amount": "The amount of money to transfer",
+    "Banks_2-recipient_name": "The name of the recipient to transfer the money to",
+    "Banks_2-transfer_time": "Number of days for the transfer to go through",
+    "Flights_3-passengers": "Number of passengers to find flight seats for",
+    "Flights_3-flight_class": "Fare class of flight booking",
+    "Flights_3-origin_city": "City in which the journey originates",
+    "Flights_3-destination_city": "City in which the journey ends",
+    "Flights_3-origin_airport_name": "Number of the airport flying out from",
+    "Flights_3-destination_airport_name": "Number of the airport flying to",
+    "Flights_3-departure_date": "Date of departure flight",
+    "Flights_3-return_date": "Date of return flight",
+    "Flights_3-number_stops": "Number of stops in the itinerary",
+    "Flights_3-outbound_departure_time": "Local time of departure of flight from origin to destination",
+    "Flights_3-outbound_arrival_time": "Local time of arrival of flight from origin to destination",
+    "Flights_3-inbound_arrival_time": "Local time of arrival of flight from destination to origin",
+    "Flights_3-inbound_departure_time": "Local time of departure of flight from destination to origin",
+    "Flights_3-price": "Price per passenger of the itinerary",
+    "Flights_3-number_checked_bags": "Number of bags to check in",
+    "Flights_3-airlines": "Name of airline operating the flight",
+    "Flights_3-arrives_next_day": "Whether the flight arrives the next day",
+    "Media_2-movie_name": "Name of the movie",
+    "Media_2-genre": "Main genre of the movie",
+    "Media_2-subtitle_language": "Language to use for subtitles (or None for no subtitles)",
+    "Media_2-director": "Name of the director of the movie",
+    "Media_2-actors": "Name of an actor starring in the movie",
+    "Media_2-price": "Cost of renting movie",
+    "Movies_2-title": "Title for movie",
+    "Movies_2-genre": "Genre of the movie",
+    "Movies_2-aggregate_rating": "Aggregate user rating for movie, scale of 10",
+    "Movies_2-starring": "Name of actor starring in movie",
+    "Movies_2-director": "Name of director of the movie"
+  }
+}
