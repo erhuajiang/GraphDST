@@ -42,6 +42,9 @@ class BertForDST(BertPreTrainedModel):
         self.class_aux_feats_ds = config.dst_class_aux_feats_ds
         self.class_loss_ratio = config.dst_class_loss_ratio
         self.schema_loss_ratio = config.dst_schema_loss_ratio
+        self.task_name = config.task_name
+        self.node_num = len(self.domain_list) + len(self.slot_list)
+        self.max_seq_len = config.dst_sequence_len
 
         # Only use refer loss if refer class is present in dataset.
         if 'refer' in self.class_types:
@@ -50,6 +53,7 @@ class BertForDST(BertPreTrainedModel):
             self.refer_index = -1
 
         self.bert = BertModel(config)
+        self.bert_node = BertModel(config)
         self.dropout = nn.Dropout(config.dst_dropout_rate)
         self.dropout_heads = nn.Dropout(config.dst_heads_dropout_rate)
         
@@ -97,7 +101,7 @@ class BertForDST(BertPreTrainedModel):
                 schema_graph_matrix_occur=None,
                 schema_graph_matrix_update=None,
                 slot_id=None,
-                input_ids_ndoes=None,
+                input_ids_nodes=None,
                 input_mask_nodes=None,
                 segment_ids_nodes=None
                 ):
@@ -114,6 +118,24 @@ class BertForDST(BertPreTrainedModel):
 
         sequence_output = self.dropout(sequence_output)
         pooled_output = self.dropout(pooled_output)
+        
+        if self.task_name == "sgd":
+            input_ids_nodes = torch.reshape(input_ids_nodes, (-1, self.max_seq_len))
+            input_mask_nodes = torch.reshape(input_mask_nodes, (-1, self.max_seq_len))
+            segment_ids_nodes = torch.reshape(segment_ids_nodes, (-1, self.max_seq_len))
+            outputs_nodes = self.bert_node(
+                input_ids_nodes,
+                attention_mask=input_mask_nodes,
+                token_type_ids=segment_ids_nodes,
+                position_ids=position_ids,
+                head_mask=head_mask
+            )
+    
+            sequence_output_nodes = outputs_nodes[0]
+            pooled_output_nodes = outputs_nodes[1]
+    
+            pooled_output_nodes = self.dropout(pooled_output_nodes)
+            pooled_output_nodes = torch.reshape(pooled_output_nodes, (-1, self.node_num, self.max_seq_len))
 
         # TODO: establish proper format in labels already?
         if inform_slot_id is not None:
@@ -132,8 +154,11 @@ class BertForDST(BertPreTrainedModel):
             pooled_output_aux = pooled_output
             
         # schema graph
-        node_embedding_table = self.node_table()
-        batch_node_embedding = node_embedding_table(slot_id)
+        if self.task_name != "sgd":
+            node_embedding_table = self.node_table()
+            batch_node_embedding = node_embedding_table(slot_id)
+        else:
+            batch_node_embedding = pooled_output_nodes
         # real_batch_size = self.config.dst_batch_size
         # tile_node_embedding_table = node_embedding_table.repeat(real_batch_size, 1, 1)
         initial_node_embedding = self.graph(batch_node_embedding, initial_node_matrix, initial_node_matrix, initial_node_matrix)

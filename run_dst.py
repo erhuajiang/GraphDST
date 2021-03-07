@@ -826,6 +826,7 @@ def main():
     config.dst_class_types = dst_class_types
     config.dst_class_labels = dst_class_labels
     config.dst_sequence_len = args.max_seq_length
+    config.task_name = task_name
     if args.do_train:
         config.dst_batch_size = args.per_gpu_train_batch_size * max(1, args.n_gpu)
     else:
